@@ -1,0 +1,41 @@
+{
+  "_comment": "Sample fictício para migração. Não usar em produção.",
+  "id": "chk-op-001",
+  "managerId": "mgr-001",
+  "userId": "op-001",
+  "userName": "Operador Exemplo",
+  "date": "2026-03-05",
+  "equipmentNo": "EQ-TR-01",
+  "area": "OPERACAO",
+  "shift": "A",
+  "approvalStatus": "PENDING",
+  "createdAt": 1772707200000,
+  "observations": "Vazamento leve identificado no sistema hidráulico.",
+  "evidence": [
+    "data:image/png;base64,AAA..."
+  ],
+  "data": {
+    "items": [
+      {
+        "id": 1,
+        "description": "Verificar nível de óleo",
+        "status": "C",
+        "area": "OPERACAO"
+      },
+      {
+        "id": 2,
+        "description": "Inspecionar vazamentos",
+        "status": "NC",
+        "area": "OPERACAO",
+        "ncDetail": {
+          "note": "Pequeno vazamento próximo à mangueira lateral",
+          "evidence": "data:image/png;base64,AAA..."
+        }
+      }
+    ],
+    "timestamps": {
+      "startedAt": "2026-03-05T08:00:00Z",
+      "finishedAt": "2026-03-05T08:12:00Z"
+    }
+  }
+}

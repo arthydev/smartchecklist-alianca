@@ -1,0 +1,507 @@
+Processo de provisão iniciado.
+[2026-02-04 17:07:34 -0300] info [xml-api] Loaded plugins: builddep, changelog, config-manager, copr, debug, debuginfo-install, download, generate_completion_cache, groups-manager, kpatch, needs-restarting, notify-packagekit, playground, repoclosure, repodiff, repograph, repomanage, reposync, system-upgrade, universal-hooks
+[2026-02-04 17:07:34 -0300] info [xml-api] DNF version: 4.14.0
+[2026-02-04 17:07:34 -0300] info [xml-api] cachedir: /var/cache/dnf
+[2026-02-04 17:07:34 -0300] info [xml-api] Unknown configuration option: failovermethod = priority in /etc/yum.repos.d/epel.repo
+[2026-02-04 17:07:34 -0300] info [xml-api] User-Agent: constructed: 'libdnf (AlmaLinux 9.7; generic; Linux.x86_64)'
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: EA4-c9
+[2026-02-04 17:07:34 -0300] info [xml-api] EA4-c9: using metadata from Thu Jan 22 17:18:49 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: EA4_endurance
+[2026-02-04 17:07:34 -0300] info [xml-api] EA4_endurance: using metadata from Fri Jan  9 17:57:58 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: cpanel-addons-production-feed
+[2026-02-04 17:07:34 -0300] info [xml-api] cpanel-addons-production-feed: using metadata from Thu Jan 15 11:37:09 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: cpanel-plugins
+[2026-02-04 17:07:34 -0300] info [xml-api] cpanel-plugins: using metadata from Tue Feb  3 15:44:32 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: ul_hostgator_br
+[2026-02-04 17:07:34 -0300] info [xml-api] ul_hostgator_br: using metadata from Thu Aug 24 13:09:07 2017.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: appstream
+[2026-02-04 17:07:34 -0300] info [xml-api] appstream: using metadata from Tue Feb  3 08:11:26 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: baseos
+[2026-02-04 17:07:34 -0300] info [xml-api] baseos: using metadata from Tue Feb  3 08:12:02 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: crb
+[2026-02-04 17:07:34 -0300] info [xml-api] crb: using metadata from Tue Feb  3 08:12:27 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: extras
+[2026-02-04 17:07:34 -0300] info [xml-api] extras: using metadata from Tue Feb  3 08:12:17 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: alt-common
+[2026-02-04 17:07:34 -0300] info [xml-api] alt-common: using metadata from Tue Feb  3 14:04:09 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: hgdedi
+[2026-02-04 17:07:34 -0300] info [xml-api] hgdedi: using metadata from Tue Sep 23 14:24:26 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: dedi
+[2026-02-04 17:07:34 -0300] info [xml-api] dedi: using metadata from Tue Sep 23 14:24:26 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: epel
+[2026-02-04 17:07:34 -0300] info [xml-api] epel: using metadata from Tue Feb  3 21:28:13 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: epel-cisco-openh264
+[2026-02-04 17:07:34 -0300] info [xml-api] epel-cisco-openh264: using metadata from Mon May 22 13:19:21 2023.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-5
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-5: using metadata from Tue Jan 20 07:03:38 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-6
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-6: using metadata from Wed Feb  4 07:23:05 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-7
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-7: using metadata from Tue Jan 20 05:46:07 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-8
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-8: using metadata from Tue Nov 18 12:38:33 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-1
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-1: using metadata from Fri Jan 30 09:25:31 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-2
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-2: using metadata from Sat Jan 17 05:03:14 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-3
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-3: using metadata from Fri Jan 23 06:03:16 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-4
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-4: using metadata from Fri Jan 16 05:36:34 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360: using metadata from Thu Jan 29 09:16:06 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: mysql80-community
+[2026-02-04 17:07:34 -0300] info [xml-api] mysql80-community: using metadata from Fri Jan 16 13:30:38 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: mysql-connectors-community
+[2026-02-04 17:07:34 -0300] info [xml-api] mysql-connectors-community: using metadata from Mon Jan 19 16:47:42 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: mysql-tools-community
+[2026-02-04 17:07:34 -0300] info [xml-api] mysql-tools-community: using metadata from Mon Jan 19 13:25:09 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: remi
+[2026-02-04 17:07:34 -0300] info [xml-api] remi: using metadata from Wed Feb  4 04:57:15 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: remi-modular
+[2026-02-04 17:07:34 -0300] info [xml-api] remi-modular: using metadata from Wed Feb  4 04:59:29 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: remi-safe
+[2026-02-04 17:07:34 -0300] info [xml-api] remi-safe: using metadata from Wed Feb  4 04:58:34 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: ul
+[2026-02-04 17:07:34 -0300] info [xml-api] ul: using metadata from Fri Oct  3 15:11:55 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: ul_auto
+[2026-02-04 17:07:34 -0300] info [xml-api] ul_auto: using metadata from Wed Jun 11 21:56:01 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: wp-toolkit-cpanel
+[2026-02-04 17:07:34 -0300] info [xml-api] wp-toolkit-cpanel: using metadata from Wed Jan 14 16:42:55 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: wp-toolkit-thirdparties
+[2026-02-04 17:07:34 -0300] info [xml-api] wp-toolkit-thirdparties: using metadata from Wed Jan 14 16:42:57 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] Last metadata expiration check: 3:31:59 ago on Wed Feb  4 13:35:02 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] Excludes in dnf.conf: bind-chroot, dovecot*, exim*, filesystem, p0f, php*, proftpd*, pure-ftpd*
+[2026-02-04 17:07:34 -0300] info [xml-api] Includes in repo remi: ImageMagick, ImageMagick-*
+[2026-02-04 17:07:34 -0300] info [xml-api] --> Starting dependency resolution
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package ea-nginx.x86_64 1:1.29.4-2.3.1.cpanel will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package ea-nginx-passenger.x86_64 6.1.1-1.1.3.cpanel will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package ea-nodejs18.x86_64 18.20.8-1.4.2.cpanel will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package ea-passenger-runtime.x86_64 1.0-2.9.2.cpanel will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package ruby.x86_64 3.0.7-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package ruby-default-gems.noarch 3.0.7-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package ruby-libs.x86_64 3.0.7-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package rubygem-bigdecimal.x86_64 3.0.0-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package rubygem-bundler.noarch 2.2.33-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package rubygem-io-console.x86_64 0.5.7-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package rubygem-json.x86_64 2.5.1-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package rubygem-psych.x86_64 3.3.2-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package rubygem-rdoc.noarch 6.3.4.1-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] ---> Package rubygems.noarch 3.2.33-165.el9_5 will be installed
+[2026-02-04 17:07:34 -0300] info [xml-api] --> Finished dependency resolution
+[2026-02-04 17:07:34 -0300] info [xml-api] ================================================================================
+[2026-02-04 17:07:34 -0300] info [xml-api]  Package                 Arch      Version                   Repository    Size
+[2026-02-04 17:07:34 -0300] info [xml-api] ================================================================================
+[2026-02-04 17:07:34 -0300] info [xml-api] Installing:
+[2026-02-04 17:07:34 -0300] info [xml-api]  ea-nginx                x86_64    1:1.29.4-2.3.1.cpanel     EA4-c9       1.0 M
+[2026-02-04 17:07:34 -0300] info [xml-api]  ea-nginx-passenger      x86_64    6.1.1-1.1.3.cpanel        EA4-c9       335 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  ea-nodejs18             x86_64    18.20.8-1.4.2.cpanel      EA4-c9        26 M
+[2026-02-04 17:07:34 -0300] info [xml-api]  ea-passenger-runtime    x86_64    1.0-2.9.2.cpanel          EA4-c9        13 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  ruby                    x86_64    3.0.7-165.el9_5           appstream     38 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  ruby-default-gems       noarch    3.0.7-165.el9_5           appstream     29 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  ruby-libs               x86_64    3.0.7-165.el9_5           appstream    3.2 M
+[2026-02-04 17:07:34 -0300] info [xml-api]  rubygem-bigdecimal      x86_64    3.0.0-165.el9_5           appstream     51 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  rubygem-bundler         noarch    2.2.33-165.el9_5          appstream    369 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  rubygem-io-console      x86_64    0.5.7-165.el9_5           appstream     22 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  rubygem-json            x86_64    2.5.1-165.el9_5           appstream     51 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  rubygem-psych           x86_64    3.3.2-165.el9_5           appstream     48 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  rubygem-rdoc            noarch    6.3.4.1-165.el9_5         appstream    398 k
+[2026-02-04 17:07:34 -0300] info [xml-api]  rubygems                noarch    3.2.33-165.el9_5          appstream    253 k
+[2026-02-04 17:07:34 -0300] info [xml-api] Transaction Summary
+[2026-02-04 17:07:34 -0300] info [xml-api] ================================================================================
+[2026-02-04 17:07:34 -0300] info [xml-api] Install  14 Packages
+[2026-02-04 17:07:34 -0300] info [xml-api] Total download size: 32 M
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed size: 166 M
+[2026-02-04 17:07:34 -0300] info [xml-api] Downloading Packages:
+[2026-02-04 17:07:34 -0300] info [xml-api] (1/14): ea-nginx-passenger-6.1.1-1.1.3.cpanel.x 281 kB/s | 335 kB     00:01    
+[2026-02-04 17:07:34 -0300] info [xml-api] (2/14): ea-passenger-runtime-1.0-2.9.2.cpanel.x  64 kB/s |  13 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (3/14): ruby-3.0.7-165.el9_5.x86_64.rpm         803 kB/s |  38 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (4/14): ruby-default-gems-3.0.7-165.el9_5.noarc 1.7 MB/s |  29 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (5/14): ruby-libs-3.0.7-165.el9_5.x86_64.rpm     33 MB/s | 3.2 MB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (6/14): rubygem-bigdecimal-3.0.0-165.el9_5.x86_ 3.3 MB/s |  51 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (7/14): ea-nginx-1.29.4-2.3.1.cpanel.x86_64.rpm 676 kB/s | 1.0 MB     00:01    
+[2026-02-04 17:07:34 -0300] info [xml-api] (8/14): rubygem-bundler-2.2.33-165.el9_5.noarch  17 MB/s | 369 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (9/14): rubygem-json-2.5.1-165.el9_5.x86_64.rpm 3.3 MB/s |  51 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (10/14): rubygem-psych-3.3.2-165.el9_5.x86_64.r 3.0 MB/s |  48 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (11/14): rubygem-io-console-0.5.7-165.el9_5.x86 613 kB/s |  22 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (12/14): rubygem-rdoc-6.3.4.1-165.el9_5.noarch.  20 MB/s | 398 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (13/14): rubygems-3.2.33-165.el9_5.noarch.rpm   4.7 MB/s | 253 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] (14/14): ea-nodejs18-18.20.8-1.4.2.cpanel.x86_6 7.6 MB/s |  26 MB     00:03    
+[2026-02-04 17:07:34 -0300] info [xml-api] --------------------------------------------------------------------------------
+[2026-02-04 17:07:34 -0300] info [xml-api] Total                                           7.3 MB/s |  32 MB     00:04     
+[2026-02-04 17:07:34 -0300] info [xml-api] Using rpmkeys executable at /bin/rpmkeys to verify signatures
+[2026-02-04 17:07:34 -0300] info [xml-api] Running transaction check
+[2026-02-04 17:07:34 -0300] info [xml-api] Transaction check succeeded.
+[2026-02-04 17:07:34 -0300] info [xml-api] Running transaction test
+[2026-02-04 17:07:34 -0300] info [xml-api] Transaction test succeeded.
+[2026-02-04 17:07:34 -0300] info [xml-api] usermod: no changes
+[2026-02-04 17:07:34 -0300] info [xml-api] Running transaction
+[2026-02-04 17:07:34 -0300] info [xml-api]   Preparing        :                                                        1/1 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : ruby-libs-3.0.7-165.el9_5.x86_64                      1/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : rubygem-bigdecimal-3.0.0-165.el9_5.x86_64             2/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : ruby-default-gems-3.0.7-165.el9_5.noarch              3/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : rubygem-bundler-2.2.33-165.el9_5.noarch               4/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : rubygem-io-console-0.5.7-165.el9_5.x86_64             5/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : rubygem-json-2.5.1-165.el9_5.x86_64                   6/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : rubygem-psych-3.3.2-165.el9_5.x86_64                  7/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : rubygem-rdoc-6.3.4.1-165.el9_5.noarch                 8/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : rubygems-3.2.33-165.el9_5.noarch                      9/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : ruby-3.0.7-165.el9_5.x86_64                          10/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : ea-passenger-runtime-1.0-2.9.2.cpanel.x86_64         11/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Running scriptlet: ea-nginx-1:1.29.4-2.3.1.cpanel.x86_64                12/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : ea-nginx-1:1.29.4-2.3.1.cpanel.x86_64                12/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Running scriptlet: ea-nginx-1:1.29.4-2.3.1.cpanel.x86_64                12/14 
+[2026-02-04 17:07:34 -0300] info [xml-api] ----------------------------------------------------------------------
+[2026-02-04 17:07:34 -0300] info [xml-api] Thanks for using nginx!
+[2026-02-04 17:07:34 -0300] info [xml-api] Please find the official documentation for nginx here:
+[2026-02-04 17:07:34 -0300] info [xml-api] * http://nginx.org/en/docs/
+[2026-02-04 17:07:34 -0300] info [xml-api] Please subscribe to nginx-announce mailing list to get
+[2026-02-04 17:07:34 -0300] info [xml-api] the most important news about nginx:
+[2026-02-04 17:07:34 -0300] info [xml-api] * http://nginx.org/en/support.html
+[2026-02-04 17:07:34 -0300] info [xml-api] Commercial subscriptions for nginx are available on:
+[2026-02-04 17:07:34 -0300] info [xml-api] * http://nginx.com/products/
+[2026-02-04 17:07:34 -0300] info [xml-api] ----------------------------------------------------------------------
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting for “httpd” to stop ………finished.
+[2026-02-04 17:07:34 -0300] info [xml-api] Startup Log
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:09 vps-14911616.acosalianca.com.br systemd[1]: Stopping Apache web server managed by cPanel EasyApache...
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:09 vps-14911616.acosalianca.com.br systemd[1]: httpd.service: Deactivated successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:09 vps-14911616.acosalianca.com.br systemd[1]: Stopped Apache web server managed by cPanel EasyApache.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:09 vps-14911616.acosalianca.com.br systemd[1]: httpd.service: Consumed 48.698s CPU time, 108.3M memory peak.
+[2026-02-04 17:07:34 -0300] info [xml-api] httpd stopped successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] Running move_apache_to_alt_ports() …
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : ea-nginx-passenger-6.1.1-1.1.3.cpanel.x86_64         13/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Installing       : ea-nodejs18-18.20.8-1.4.2.cpanel.x86_64              14/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Running scriptlet: ea-passenger-runtime-1.0-2.9.2.cpanel.x86_64         14/14 
+[2026-02-04 17:07:34 -0300] info [xml-api] Default is fallback helper, attempting to re-set it
+[2026-02-04 17:07:34 -0300] info [xml-api] 	 … updating to “/usr/bin/ruby”
+[2026-02-04 17:07:34 -0300] info [xml-api] Default is fallback helper, attempting to re-set it
+[2026-02-04 17:07:34 -0300] info [xml-api] 	 … updating to “/usr/bin/python3.9”
+[2026-02-04 17:07:34 -0300] info [xml-api] Default is fallback helper, attempting to re-set it
+[2026-02-04 17:07:34 -0300] info [xml-api] 	 … no nodejs found on system, leaving currently invalid value in place
+[2026-02-04 17:07:34 -0300] info [xml-api] Verifying passenger setting for ruby
+[2026-02-04 17:07:34 -0300] info [xml-api] 	ruby is not configured for passenger, using default.
+[2026-02-04 17:07:34 -0300] info [xml-api] 		Resetting ruby setting to /usr/bin/ruby
+[2026-02-04 17:07:34 -0300] info [xml-api] Verifying passenger setting for python
+[2026-02-04 17:07:34 -0300] info [xml-api] 	python is not configured for passenger, using default.
+[2026-02-04 17:07:34 -0300] info [xml-api] 		Resetting python setting to /usr/bin/python3.9
+[2026-02-04 17:07:34 -0300] info [xml-api] Verifying passenger setting for nodejs
+[2026-02-04 17:07:34 -0300] info [xml-api] 	nodejs setting, /opt/cpanel/ea-nodejs18/bin/node, is ok
+[2026-02-04 17:07:34 -0300] info [xml-api] No passenger application settings need fixed.
+[2026-02-04 17:07:34 -0300] info [xml-api]   Running scriptlet: ea-nginx-1:1.29.4-2.3.1.cpanel.x86_64                14/14 
+[2026-02-04 17:07:34 -0300] info [xml-api] The “global passenger defaults” application’s “nodejs” value (/opt/cpanel/ea-nodejs10/bin/node) is not executable/does not exist.
+[2026-02-04 17:07:34 -0300] info [xml-api] The current default, /opt/cpanel/ea-nodejs18/bin/node, will be in effect for the “global passenger defaults” application.
+[2026-02-04 17:07:34 -0300] info [xml-api] The “global passenger defaults” application’s “ruby” value (/opt/cpanel/ea-ruby24/root/usr/libexec/passenger-ruby24) is not executable/does not exist.
+[2026-02-04 17:07:34 -0300] info [xml-api] The current default, /usr/bin/ruby, will be in effect for the “global passenger defaults” application.
+[2026-02-04 17:07:34 -0300] info [xml-api] Running (global) “/etc/nginx/ea-nginx/config-scripts/global/config-scripts-global-cloudflare” …
+[2026-02-04 17:07:34 -0300] info [xml-api] Updated /etc/nginx/conf.d/includes-optional/cloudflare.conf OK
+[2026-02-04 17:07:34 -0300] info [xml-api] Gathering wordpress data...
+[2026-02-04 17:07:34 -0300] info [xml-api] ...done gathering wordpress data
+[2026-02-04 17:07:34 -0300] info [xml-api] Setting up /etc/nginx/conf.d/users/leon2682.conf …
+[2026-02-04 17:07:34 -0300] info [xml-api] Processing leon2682 (/home/leon2682)
+[2026-02-04 17:07:34 -0300] info [xml-api] 	cPanel password protected directories …
+[2026-02-04 17:07:34 -0300] info [xml-api] 	cPanel redirects …
+[2026-02-04 17:07:34 -0300] info [xml-api]  … done (leon2682).
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Use of uninitialized value in pattern match (m//) at /usr/local/cpanel/scripts/ea-nginx line 1938.
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api1::Htaccess::del_user to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api1::Htaccess::set_index to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api1::Htaccess::set_pass to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api1::Htaccess::set_protect to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api1::Park::park to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api1::Park::unpark to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api2::AddonDomain::addaddondomain to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api2::AddonDomain::deladdondomain to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api2::Park::park to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api2::Park::unpark to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api2::SubDomain::addsubdomain to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api2::SubDomain::delsubdomain to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::LangPHP::php_set_vhost_versions to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::LangPHP::php_ini_set_user_content to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::LangPHP::php_ini_set_user_basic_directives to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::Mime::add_redirect to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::Mime::delete_redirect to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::SSL::delete_ssl to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::SSL::install_ssl to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::SSL::toggle_ssl_redirect_for_domains to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::SubDomain::addsubdomain to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::UAPI::WordPressInstanceManager::start_scan to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for scripts::build_apache_conf to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Accounts::Modify to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Accounts::Remove to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Hostname::change to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::PipedLogConfiguration to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::TweakSettings::Basic to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::TweakSettings::Main to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Accounts::Remove to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Accounts::Create to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Accounts::SiteIP::set to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::AutoSSL::installssl to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::SSL::delssl to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::SSL::installssl to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Domain::park to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Domain::unpark to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Domain::addsubdomain to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Domain::delsubdomain to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Lang::PHP::set_vhost_versions to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Lang::PHP::ini_set_content to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Lang::PHP::set_system_default_version to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Lang::PHP::ini_set_directives to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for scripts::php_fpm_config to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Cpanel::Api1::cPAddons::mainpg to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Accounts::suspendacct to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Whostmgr::Accounts::unsuspendacct to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Stats::RunUser to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Added hook for Stats::RunAll to hooks registry
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting for “queueprocd” to restart gracefully ……waiting for “queueprocd” to initialize ………finished.
+[2026-02-04 17:07:34 -0300] info [xml-api] Service Status
+[2026-02-04 17:07:34 -0300] info [xml-api] 	queueprocd (/usr/local/cpanel/libexec/queueprocd --reexec --systemd) is running as root with PID 702735 (systemd+/proc check method).
+[2026-02-04 17:07:34 -0300] info [xml-api] Startup Log
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:08 vps-14911616.acosalianca.com.br systemd[1]: /etc/systemd/system/queueprocd.service:7: PIDFile= references a path below legacy directory /var/run/, updating /var/run/queueprocd.pid → /run/queueprocd.pid; please update the unit file accordingly.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:08 vps-14911616.acosalianca.com.br systemd[1]: /etc/systemd/system/queueprocd.service:7: PIDFile= references a path below legacy directory /var/run/, updating /var/run/queueprocd.pid → /run/queueprocd.pid; please update the unit file accordingly.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:08 vps-14911616.acosalianca.com.br systemd[1]: /etc/systemd/system/queueprocd.service:7: PIDFile= references a path below legacy directory /var/run/, updating /var/run/queueprocd.pid → /run/queueprocd.pid; please update the unit file accordingly.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:09 vps-14911616.acosalianca.com.br systemd[1]: /etc/systemd/system/queueprocd.service:7: PIDFile= references a path below legacy directory /var/run/, updating /var/run/queueprocd.pid → /run/queueprocd.pid; please update the unit file accordingly.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:10 vps-14911616.acosalianca.com.br systemd[1]: queueprocd.service: Got notification message from PID 2318686, but reception only permitted for main PID 702735
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:14 vps-14911616.acosalianca.com.br systemd[1]: queueprocd.service: Got notification message from PID 2318976, but reception only permitted for main PID 702735
+[2026-02-04 17:07:34 -0300] info [xml-api] queueprocd restarted successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] Stopping apache …
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting for “httpd” to stop ………finished.
+[2026-02-04 17:07:34 -0300] info [xml-api] Startup Log
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:11 vps-14911616.acosalianca.com.br systemd[1]: Starting Apache web server managed by cPanel EasyApache...
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:12 vps-14911616.acosalianca.com.br systemd[1]: httpd.service: Can't open PID file /run/apache2/httpd.pid (yet?) after start: Operation not permitted
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:12 vps-14911616.acosalianca.com.br systemd[1]: Started Apache web server managed by cPanel EasyApache.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:15 vps-14911616.acosalianca.com.br systemd[1]: Stopping Apache web server managed by cPanel EasyApache...
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br systemd[1]: httpd.service: Deactivated successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br systemd[1]: Stopped Apache web server managed by cPanel EasyApache.
+[2026-02-04 17:07:34 -0300] info [xml-api] Log Messages
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:12.056966 2026] [mpm_event:notice] [pid 2318749:tid 2318749] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:11.988974 2026] [security2:notice] [pid 2318742:tid 2318742] ModSecurity for Apache/2.9.12 (http://www.modsecurity.org/) configured.
+[2026-02-04 17:07:34 -0300] info [xml-api] httpd stopped successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting on apache to fully stop before continuing …
+[2026-02-04 17:07:34 -0300] info [xml-api] Starting nginx …
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting for “nginx” to start ……waiting for “nginx” to initialize ………finished.
+[2026-02-04 17:07:34 -0300] info [xml-api] Service Status
+[2026-02-04 17:07:34 -0300] info [xml-api] 	nginx (nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf) is running as root with PID 2319054 (systemd+/proc check method).
+[2026-02-04 17:07:34 -0300] info [xml-api] Startup Log
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br systemd[1]: Starting nginx - high performance web server...
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br nginx[2319050]: nginx: [alert] Unable to start Phusion Passenger(R): Support binary PassengerAgent not found (tried: /usr/bin/../share/passenger/phusion_passenger/locations.ini/buildout/support-binaries/PassengerAgent and /root/.passenger/support-binaries/6.1.1/PassengerAgent). There may be different causes for this:
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br nginx[2319050]:  - Your 'passenger_root' setting is set to the wrong value. Please see https://www.phusionpassenger.com/library/config/nginx/reference/#passenger_root to learn how to fix the value.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br nginx[2319050]:  - The PassengerAgent binary is not compiled. Please run this command to compile it: /usr/bin/../share/passenger/phusion_passenger/locations.ini/bin/passenger-config compile-agent
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br nginx[2319050]:  - Your Passenger installation is broken or incomplete. Please reinstall Passenger. (-1: Unknown error)
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br systemd[1]: nginx.service: Can't open PID file /run/nginx.pid (yet?) after start: Operation not permitted
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:16 vps-14911616.acosalianca.com.br systemd[1]: Started nginx - high performance web server.
+[2026-02-04 17:07:34 -0300] info [xml-api] nginx started successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting on nginx to come up …
+[2026-02-04 17:07:34 -0300] info [xml-api] Starting apache …
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting for “httpd” to start ……waiting for “httpd” to initialize ………finished.
+[2026-02-04 17:07:34 -0300] info [xml-api] Service Status
+[2026-02-04 17:07:34 -0300] info [xml-api] 	httpd (/usr/sbin/httpd -k start) is running as root with PID 2319151 (systemd+/proc check method).
+[2026-02-04 17:07:34 -0300] info [xml-api] Startup Log
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: Starting Apache web server managed by cPanel EasyApache...
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: httpd.service: Can't open PID file /run/apache2/httpd.pid (yet?) after start: Operation not permitted
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: Started Apache web server managed by cPanel EasyApache.
+[2026-02-04 17:07:34 -0300] info [xml-api] Log Messages
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:18.755495 2026] [mpm_event:notice] [pid 2319151:tid 2319151] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:18.718957 2026] [security2:notice] [pid 2319147:tid 2319147] ModSecurity for Apache/2.9.12 (http://www.modsecurity.org/) configured.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:12.056966 2026] [mpm_event:notice] [pid 2318749:tid 2318749] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:11.988974 2026] [security2:notice] [pid 2318742:tid 2318742] ModSecurity for Apache/2.9.12 (http://www.modsecurity.org/) configured.
+[2026-02-04 17:07:34 -0300] info [xml-api] httpd started successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] … done
+[2026-02-04 17:07:34 -0300] info [xml-api]   Running scriptlet: ea-nodejs18-18.20.8-1.4.2.cpanel.x86_64              14/14 
+[2026-02-04 17:07:34 -0300] info [xml-api] /usr/lib/tmpfiles.d/ea-passenger.conf:1: Line references path below legacy directory /var/run/, updating /var/run/ea-passenger-runtime → /run/ea-passenger-runtime; please update the tmpfiles.d/ drop-in file accordingly.
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : ea-nginx-1:1.29.4-2.3.1.cpanel.x86_64                 1/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : ea-nginx-passenger-6.1.1-1.1.3.cpanel.x86_64          2/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : ea-nodejs18-18.20.8-1.4.2.cpanel.x86_64               3/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : ea-passenger-runtime-1.0-2.9.2.cpanel.x86_64          4/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : ruby-3.0.7-165.el9_5.x86_64                           5/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : ruby-default-gems-3.0.7-165.el9_5.noarch              6/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : ruby-libs-3.0.7-165.el9_5.x86_64                      7/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : rubygem-bigdecimal-3.0.0-165.el9_5.x86_64             8/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : rubygem-bundler-2.2.33-165.el9_5.noarch               9/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : rubygem-io-console-0.5.7-165.el9_5.x86_64            10/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : rubygem-json-2.5.1-165.el9_5.x86_64                  11/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : rubygem-psych-3.3.2-165.el9_5.x86_64                 12/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : rubygem-rdoc-6.3.4.1-165.el9_5.noarch                13/14 
+[2026-02-04 17:07:34 -0300] info [xml-api]   Verifying        : rubygems-3.2.33-165.el9_5.noarch                     14/14 
+[2026-02-04 17:07:34 -0300] info [xml-api] Completion plugin: Generating completion cache...
+[2026-02-04 17:07:34 -0300] info [xml-api] usermod: no changes
+[2026-02-04 17:07:34 -0300] info [xml-api] Purging all relevant cached command results
+[2026-02-04 17:07:34 -0300] info [xml-api] Removing:  /root/.cpanel/datastore/_usr_sbin_httpd_-v
+[2026-02-04 17:07:34 -0300] info [xml-api] Removing:  /root/.cpanel/datastore/_usr_sbin_httpd_-L
+[2026-02-04 17:07:34 -0300] info [xml-api] Removing:  /root/.cpanel/datastore/_usr_sbin_httpd_-V
+[2026-02-04 17:07:34 -0300] info [xml-api] Removing:  /root/.cpanel/datastore/_usr_sbin_httpd_-l
+[2026-02-04 17:07:34 -0300] info [xml-api] Rebuilding global cache
+[2026-02-04 17:07:34 -0300] info [xml-api] Building global cache for cpanel...Done
+[2026-02-04 17:07:34 -0300] info [xml-api] Nothing to do (/etc/suphp.conf does not exist)
+[2026-02-04 17:07:34 -0300] info [xml-api] Built /etc/apache2/conf/httpd.conf OK
+[2026-02-04 17:07:34 -0300] info [xml-api] Nothing to do under ea4 (this script has been deprecated under ea4).
+[2026-02-04 17:07:34 -0300] info [xml-api] Fix mailman package directories …
+[2026-02-04 17:07:34 -0300] info [xml-api]  … PID 2320157
+[2026-02-04 17:07:34 -0300] info [xml-api] Fix mailing list perms …
+[2026-02-04 17:07:34 -0300] info [xml-api]  … PID 2320159
+[2026-02-04 17:07:34 -0300] info [xml-api] Aligning modsec config to Whostmgr
+[2026-02-04 17:07:34 -0300] info [xml-api] - Whostmgr version 11.126.0.42
+[2026-02-04 17:07:34 -0300] info [xml-api] - Whostmgr supports conf.d/modsec location
+[2026-02-04 17:07:34 -0300] info [xml-api] - No change necessary
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting for “httpd” to restart gracefully …waiting for “httpd” to initialize ………finished.
+[2026-02-04 17:07:34 -0300] info [xml-api] Service Status
+[2026-02-04 17:07:34 -0300] info [xml-api] 	httpd (/usr/sbin/httpd -k start) is running as root with PID 2319151 (systemd+/proc check method).
+[2026-02-04 17:07:34 -0300] info [xml-api] Startup Log
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: Starting Apache web server managed by cPanel EasyApache...
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: httpd.service: Can't open PID file /run/apache2/httpd.pid (yet?) after start: Operation not permitted
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: Started Apache web server managed by cPanel EasyApache.
+[2026-02-04 17:07:34 -0300] info [xml-api] Log Messages
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:24.855911 2026] [mpm_event:notice] [pid 2319151:tid 2319151] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:18.755495 2026] [mpm_event:notice] [pid 2319151:tid 2319151] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:18.718957 2026] [security2:notice] [pid 2319147:tid 2319147] ModSecurity for Apache/2.9.12 (http://www.modsecurity.org/) configured.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:12.056966 2026] [mpm_event:notice] [pid 2318749:tid 2318749] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:11.988974 2026] [security2:notice] [pid 2318742:tid 2318742] ModSecurity for Apache/2.9.12 (http://www.modsecurity.org/) configured.
+[2026-02-04 17:07:34 -0300] info [xml-api] httpd restarted successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] Setting /home permissions to 0711 … 
+[2026-02-04 17:07:34 -0300] info [xml-api] Setting permissions for users …
+[2026-02-04 17:07:34 -0300] info [xml-api] leon2682 …
+[2026-02-04 17:07:34 -0300] info [xml-api] … Done
+[2026-02-04 17:07:34 -0300] info [xml-api] Starting nginx …
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting for “nginx” to restart ………waiting for “nginx” to initialize ………finished.
+[2026-02-04 17:07:34 -0300] info [xml-api] Service Status
+[2026-02-04 17:07:34 -0300] info [xml-api] 	nginx (nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf) is running as root with PID 2320356 (systemd+/proc check method).
+[2026-02-04 17:07:34 -0300] info [xml-api] Startup Log
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:32 vps-14911616.acosalianca.com.br systemd[1]: Starting nginx - high performance web server...
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:32 vps-14911616.acosalianca.com.br nginx[2320354]: nginx: [alert] Unable to start Phusion Passenger(R): Support binary PassengerAgent not found (tried: /usr/bin/../share/passenger/phusion_passenger/locations.ini/buildout/support-binaries/PassengerAgent and /root/.passenger/support-binaries/6.1.1/PassengerAgent). There may be different causes for this:
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:32 vps-14911616.acosalianca.com.br nginx[2320354]:  - Your 'passenger_root' setting is set to the wrong value. Please see https://www.phusionpassenger.com/library/config/nginx/reference/#passenger_root to learn how to fix the value.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:32 vps-14911616.acosalianca.com.br nginx[2320354]:  - The PassengerAgent binary is not compiled. Please run this command to compile it: /usr/bin/../share/passenger/phusion_passenger/locations.ini/bin/passenger-config compile-agent
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:32 vps-14911616.acosalianca.com.br nginx[2320354]:  - Your Passenger installation is broken or incomplete. Please reinstall Passenger. (-1: Unknown error)
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:32 vps-14911616.acosalianca.com.br systemd[1]: nginx.service: Can't open PID file /run/nginx.pid (yet?) after start: Operation not permitted
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:32 vps-14911616.acosalianca.com.br systemd[1]: Started nginx - high performance web server.
+[2026-02-04 17:07:34 -0300] info [xml-api] nginx restarted successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting on nginx to come up …
+[2026-02-04 17:07:34 -0300] info [xml-api] Starting apache …
+[2026-02-04 17:07:34 -0300] info [xml-api] Waiting for “httpd” to restart gracefully …waiting for “httpd” to initialize ………finished.
+[2026-02-04 17:07:34 -0300] info [xml-api] Service Status
+[2026-02-04 17:07:34 -0300] info [xml-api] 	httpd (/usr/sbin/httpd -k start) is running as root with PID 2319151 (systemd+/proc check method).
+[2026-02-04 17:07:34 -0300] info [xml-api] Startup Log
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: Starting Apache web server managed by cPanel EasyApache...
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: httpd.service: Can't open PID file /run/apache2/httpd.pid (yet?) after start: Operation not permitted
+[2026-02-04 17:07:34 -0300] info [xml-api] 	Feb 04 17:07:18 vps-14911616.acosalianca.com.br systemd[1]: Started Apache web server managed by cPanel EasyApache.
+[2026-02-04 17:07:34 -0300] info [xml-api] Log Messages
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:32.464135 2026] [mpm_event:notice] [pid 2319151:tid 2319151] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:24.855911 2026] [mpm_event:notice] [pid 2319151:tid 2319151] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:18.755495 2026] [mpm_event:notice] [pid 2319151:tid 2319151] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:18.718957 2026] [security2:notice] [pid 2319147:tid 2319147] ModSecurity for Apache/2.9.12 (http://www.modsecurity.org/) configured.
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:12.056966 2026] [mpm_event:notice] [pid 2318749:tid 2318749] AH00489: Apache/2.4.66 (cPanel) OpenSSL/3.5.1 mod_bwlimited/1.4 configured -- resuming normal operations
+[2026-02-04 17:07:34 -0300] info [xml-api] 	[Wed Feb 04 17:07:11.988974 2026] [security2:notice] [pid 2318742:tid 2318742] ModSecurity for Apache/2.9.12 (http://www.modsecurity.org/) configured.
+[2026-02-04 17:07:34 -0300] info [xml-api] httpd restarted successfully.
+[2026-02-04 17:07:34 -0300] info [xml-api] … done
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: ea-nginx-1:1.29.4-2.3.1.cpanel.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: ea-nginx-passenger-6.1.1-1.1.3.cpanel.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: ea-nodejs18-18.20.8-1.4.2.cpanel.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: ea-passenger-runtime-1.0-2.9.2.cpanel.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: ruby-3.0.7-165.el9_5.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: ruby-default-gems-3.0.7-165.el9_5.noarch
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: ruby-libs-3.0.7-165.el9_5.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: rubygem-bigdecimal-3.0.0-165.el9_5.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: rubygem-bundler-2.2.33-165.el9_5.noarch
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: rubygem-io-console-0.5.7-165.el9_5.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: rubygem-json-2.5.1-165.el9_5.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: rubygem-psych-3.3.2-165.el9_5.x86_64
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: rubygem-rdoc-6.3.4.1-165.el9_5.noarch
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed: rubygems-3.2.33-165.el9_5.noarch
+[2026-02-04 17:07:34 -0300] info [xml-api] Installed:
+[2026-02-04 17:07:34 -0300] info [xml-api]   ea-nginx-1:1.29.4-2.3.1.cpanel.x86_64                                         
+[2026-02-04 17:07:34 -0300] info [xml-api]   ea-nginx-passenger-6.1.1-1.1.3.cpanel.x86_64                                  
+[2026-02-04 17:07:34 -0300] info [xml-api]   ea-nodejs18-18.20.8-1.4.2.cpanel.x86_64                                       
+[2026-02-04 17:07:34 -0300] info [xml-api]   ea-passenger-runtime-1.0-2.9.2.cpanel.x86_64                                  
+[2026-02-04 17:07:34 -0300] info [xml-api]   ruby-3.0.7-165.el9_5.x86_64                                                   
+[2026-02-04 17:07:34 -0300] info [xml-api]   ruby-default-gems-3.0.7-165.el9_5.noarch                                      
+[2026-02-04 17:07:34 -0300] info [xml-api]   ruby-libs-3.0.7-165.el9_5.x86_64                                              
+[2026-02-04 17:07:34 -0300] info [xml-api]   rubygem-bigdecimal-3.0.0-165.el9_5.x86_64                                     
+[2026-02-04 17:07:34 -0300] info [xml-api]   rubygem-bundler-2.2.33-165.el9_5.noarch                                       
+[2026-02-04 17:07:34 -0300] info [xml-api]   rubygem-io-console-0.5.7-165.el9_5.x86_64                                     
+[2026-02-04 17:07:34 -0300] info [xml-api]   rubygem-json-2.5.1-165.el9_5.x86_64                                           
+[2026-02-04 17:07:34 -0300] info [xml-api]   rubygem-psych-3.3.2-165.el9_5.x86_64                                          
+[2026-02-04 17:07:34 -0300] info [xml-api]   rubygem-rdoc-6.3.4.1-165.el9_5.noarch                                         
+[2026-02-04 17:07:34 -0300] info [xml-api]   rubygems-3.2.33-165.el9_5.noarch                                              
+[2026-02-04 17:07:34 -0300] info [xml-api] Complete!
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: EA4-c9
+[2026-02-04 17:07:34 -0300] info [xml-api] EA4-c9: using metadata from Thu Jan 22 17:18:49 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: EA4_endurance
+[2026-02-04 17:07:34 -0300] info [xml-api] EA4_endurance: using metadata from Fri Jan  9 17:57:58 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: cpanel-addons-production-feed
+[2026-02-04 17:07:34 -0300] info [xml-api] cpanel-addons-production-feed: using metadata from Thu Jan 15 11:37:09 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: cpanel-plugins
+[2026-02-04 17:07:34 -0300] info [xml-api] cpanel-plugins: using metadata from Tue Feb  3 15:44:32 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: ul_hostgator_br
+[2026-02-04 17:07:34 -0300] info [xml-api] ul_hostgator_br: using metadata from Thu Aug 24 13:09:07 2017.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: appstream
+[2026-02-04 17:07:34 -0300] info [xml-api] appstream: using metadata from Tue Feb  3 08:11:26 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: baseos
+[2026-02-04 17:07:34 -0300] info [xml-api] baseos: using metadata from Tue Feb  3 08:12:02 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: crb
+[2026-02-04 17:07:34 -0300] info [xml-api] crb: using metadata from Tue Feb  3 08:12:27 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: extras
+[2026-02-04 17:07:34 -0300] info [xml-api] extras: using metadata from Tue Feb  3 08:12:17 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: alt-common
+[2026-02-04 17:07:34 -0300] info [xml-api] alt-common: using metadata from Tue Feb  3 14:04:09 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: hgdedi
+[2026-02-04 17:07:34 -0300] info [xml-api] hgdedi: using metadata from Tue Sep 23 14:24:26 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: dedi
+[2026-02-04 17:07:34 -0300] info [xml-api] dedi: using metadata from Tue Sep 23 14:24:26 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: epel
+[2026-02-04 17:07:34 -0300] info [xml-api] epel: using metadata from Tue Feb  3 21:28:13 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: epel-cisco-openh264
+[2026-02-04 17:07:34 -0300] info [xml-api] epel-cisco-openh264: using metadata from Mon May 22 13:19:21 2023.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-5
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-5: using metadata from Tue Jan 20 07:03:38 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-6
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-6: using metadata from Wed Feb  4 07:23:05 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-7
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-7: using metadata from Tue Jan 20 05:46:07 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-8
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-8: using metadata from Tue Nov 18 12:38:33 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-1
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-1: using metadata from Fri Jan 30 09:25:31 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-2
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-2: using metadata from Sat Jan 17 05:03:14 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-3
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-3: using metadata from Fri Jan 23 06:03:16 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360-rollout-4
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360-rollout-4: using metadata from Fri Jan 16 05:36:34 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: imunify360
+[2026-02-04 17:07:34 -0300] info [xml-api] imunify360: using metadata from Thu Jan 29 09:16:06 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: mysql80-community
+[2026-02-04 17:07:34 -0300] info [xml-api] mysql80-community: using metadata from Fri Jan 16 13:30:38 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: mysql-connectors-community
+[2026-02-04 17:07:34 -0300] info [xml-api] mysql-connectors-community: using metadata from Mon Jan 19 16:47:42 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: mysql-tools-community
+[2026-02-04 17:07:34 -0300] info [xml-api] mysql-tools-community: using metadata from Mon Jan 19 13:25:09 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: remi
+[2026-02-04 17:07:34 -0300] info [xml-api] remi: using metadata from Wed Feb  4 04:57:15 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: remi-modular
+[2026-02-04 17:07:34 -0300] info [xml-api] remi-modular: using metadata from Wed Feb  4 04:59:29 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: remi-safe
+[2026-02-04 17:07:34 -0300] info [xml-api] remi-safe: using metadata from Wed Feb  4 04:58:34 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] UL                                              9.1 kB/s | 2.9 kB     00:00    
+[2026-02-04 17:07:34 -0300] info [xml-api] reviving: 'ul' can be revived - repomd matches.
+[2026-02-04 17:07:34 -0300] info [xml-api] ul: using metadata from Fri Oct  3 15:11:55 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: ul_auto
+[2026-02-04 17:07:34 -0300] info [xml-api] ul_auto: using metadata from Wed Jun 11 21:56:01 2025.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: wp-toolkit-cpanel
+[2026-02-04 17:07:34 -0300] info [xml-api] wp-toolkit-cpanel: using metadata from Wed Jan 14 16:42:55 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] repo: using cache for: wp-toolkit-thirdparties
+[2026-02-04 17:07:34 -0300] info [xml-api] wp-toolkit-thirdparties: using metadata from Wed Jan 14 16:42:57 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] Last metadata expiration check: 0:00:08 ago on Wed Feb  4 13:35:02 2026.
+[2026-02-04 17:07:34 -0300] info [xml-api] --> Starting dependency resolution
+[2026-02-04 17:07:34 -0300] info [xml-api] --> Finished dependency resolution
+[2026-02-04 17:07:34 -0300] info [xml-api] Dependencies resolved.
+[2026-02-04 17:07:34 -0300] info [xml-api] Nothing to do.
+[2026-02-04 17:07:34 -0300] info [xml-api] Complete!
+[2026-02-04 17:07:34 -0300] info [xml-api] The downloaded packages were saved in cache until the next successful transaction.
+[2026-02-04 17:07:34 -0300] info [xml-api] You can remove cached packages by executing 'dnf clean packages'.
+
+Processo de provisão encerrado.

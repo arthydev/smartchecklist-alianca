@@ -1,0 +1,236 @@
+# Plano de Integração: Ciclo do Coletor + GET /lotes
+
+## Objetivo
+1. Adicionar `GET /api/v1/lotes` ao backend (listagem com filtros)
+2. Integrar todas as rotas do Ciclo do Coletor no frontend
+3. Remover `historicoLotes` do `localStorage` → dados vêm da API
+
+---
+
+## PARTE 1 — Backend: `GET /api/v1/lotes`
+
+### 1A — LoteRepository: `findAll()`
+
+#### [MODIFY] [LoteRepository.php](file:///c:/xampp/htdocs/apontamento/app/Repositories/LoteRepository.php)
+
+Adicionar método `findAll` com filtros opcionais:
+
+```php
+public function findAll(array $filtros = []): array
+{
+    // filtros: status ('ABERTO'|'FECHADO'), ordem_id, per_page, page
+    // JOIN com ordem_itens + rolos (SUM aggregation)
+    // Retorna paginado
+}
+```
+
+**Query incluirá:**
+- `JOIN ordem_itens oi ON oi.id = l.ordem_item_id` → para filtrar por `ordem_id` e expor `produto_id`, `indice_ordem`
+- `LEFT JOIN rolos r ON r.lote_id = l.id` → para somar `total_peso_bom`, `total_peso_scrap`, `qtd_rolos_*`
+- Filtros: `l.fechado = 0/1`, `oi.ordem_id = ?`, `LIMIT/OFFSET` para paginação
+
+**Response shape por item:**
+```json
+{
+  "id": "BOB-100.3",
+  "status": "FECHADO",
+  "ordem_id": "42",
+  "ordem_item_id": 7,
+  "produto_id": "PROD-A",
+  "indice_ordem": 1,
+  "peso_bruto": 250.0,
+  "tara": 18.0,
+  "peso_liquido": 232.0,
+  "total_peso_bom": 228.5,
+  "total_peso_scrap": 3.5,
+  "qtd_rolos_total": 8,
+  "qtd_rolos_bom": 7,
+  "qtd_rolos_scrap": 1,
+  "data_fechamento": "2026-02-27 15:00:00",
+  "criado_em": "2026-02-27 14:00:00"
+}
+```
+
+### 1B — LoteService: `listar()`
+
+#### [MODIFY] [LoteService.php](file:///c:/xampp/htdocs/apontamento/app/Services/LoteService.php)
+
+```php
+public function listar(array $query): array
+{
+    // Lê status, ordem_id, page, per_page do $query
+    // Chama LoteRepository::findAll()
+    // Retorna ['data' => [...], 'meta' => ['total', 'page', 'per_page']]
+}
+```
+
+### 1C — LoteController: [index()](file:///c:/xampp/htdocs/apontamento/app/Http/Controllers/UsuarioController.php#16-21)
+
+#### [MODIFY] [LoteController.php](file:///c:/xampp/htdocs/apontamento/app/Http/Controllers/LoteController.php)
+
+```php
+public function index(Request $request): void
+{
+    $query = $request->query(); // status, ordem_id, page, per_page
+    $resultado = $this->loteService->listar($query);
+    $this->success('Lista de lotes', $resultado['data'], $resultado['meta']);
+}
+```
+
+### 1D — Rota
+
+#### [MODIFY] [v1.php](file:///c:/xampp/htdocs/apontamento/routes/v1.php)
+
+```php
+$router->get('/api/v1/lotes', 'LoteController@index', $authOnly);
+```
+
+> [!NOTE]
+> A rota `/api/v1/lotes/ativo` já existe e deve permanecer **antes** de `/api/v1/lotes`
+> para o router não confundir "ativo" com `{id}`.
+
+---
+
+## PARTE 2 — Frontend: Integração Completa
+
+### 2A — Tipos
+
+#### [MODIFY] [types.ts](file:///c:/xampp/htdocs/apontamento/src/types.ts)
+
+Adicionar interfaces alinhadas com o backend:
+
+```typescript
+export interface LoteAPI {
+  id: string;
+  status: 'ABERTO' | 'FECHADO';
+  ordem_id: string;
+  ordem_item_id: number;
+  produto_id: string;
+  indice_ordem: number;
+  peso_bruto: number;
+  tara: number;
+  peso_liquido: number;
+  total_peso_bom: number;
+  total_peso_scrap: number;
+  qtd_rolos_total: number;
+  qtd_rolos_bom: number;
+  qtd_rolos_scrap: number;
+  data_fechamento: string | null;
+  criado_em: string;
+}
+
+export interface ApontarRoloResponse {
+  rolo: { uid: string; lote_id: string; item_id: number; peso_liquido: number; is_scrap: boolean; criado_em: string };
+  lote_resumo: Pick<LoteAPI, 'id'|'status'|'total_peso_bom'|'total_peso_scrap'|'qtd_rolos_total'|'qtd_rolos_bom'|'qtd_rolos_scrap'> & { total_peso: number };
+  progresso_meta: { item_id: number; indice_ordem: number; produto_id: string; meta_qtd_rolos: number; apontados_qtd_rolos_bom: number; faltantes: number };
+}
+
+export interface ScannerResponse {
+  ordem: { id: string; bobina_id: string; status: string };
+  item: { id: number; produto_id: string; processo: string; indice_ordem: number; largura_mm: number; peso_teorico: number; qtd_rolos: number };
+  scanner: { codigo_injetado: string; tipo: 'UID' | 'SKU' };
+}
+```
+
+### 2B — Serviço de API
+
+#### [NEW] [coletorApi.ts](file:///c:/xampp/htdocs/apontamento/src/services/coletorApi.ts)
+
+```typescript
+export const coletorApi = {
+  // Scanner
+  scan: (codigo: string)                     => apiFetch<ScannerResponse>(`/ordens-servico/ativa/itens/${encodeURIComponent(codigo)}`),
+
+  // Lotes
+  getLoteAtivo: ()                           => apiFetch<LoteAPI>('/lotes/ativo').catch(() => null),
+  getLotesFechados: (ordemId?: string)       => apiFetch<LoteAPI[]>(`/lotes?status=FECHADO${ordemId ? `&ordem_id=${ordemId}` : ''}`),
+  abrirLote: (ordemItemId: number)           => apiFetch<LoteAPI>('/lotes', { method: 'POST', data: { ordem_item_id: ordemItemId } }),
+  fecharLote: (id: string)                   => apiFetch<LoteAPI>(`/lotes/${id}/fechar`, { method: 'PATCH' }),
+
+  // Rolos
+  apontar: (uid: string, pesoLiquido: number, isScrap = false, loteId?: string) =>
+    apiFetch<ApontarRoloResponse>('/rolos', { method: 'POST', data: { uid_codigo: uid, peso_liquido: pesoLiquido, is_scrap: isScrap, ...(loteId ? { lote_id: loteId } : {}) } }),
+  estornar: (uid: string)                    => apiFetch<void>(`/rolos/${uid}`, { method: 'DELETE' }),
+};
+```
+
+### 2C — [App.tsx](file:///c:/xampp/htdocs/apontamento/src/App.tsx) — Substituir handlers e remover localStorage
+
+#### [MODIFY] [App.tsx](file:///c:/xampp/htdocs/apontamento/src/App.tsx)
+
+**Estado novo:**
+```typescript
+const [loteAtivo, setLoteAtivo] = useState<LoteAPI | null>(null);
+const [historicoLotes, setHistoricoLotes] = useState<LoteAPI[]>([]);
+// Remover: localStorage.getItem('historicoLotes')
+```
+
+**Efeito: carregar ao montar com OS ativa:**
+```typescript
+useEffect(() => {
+  if (!ordemAtivaId) return;
+  coletorApi.getLoteAtivo().then(setLoteAtivo);
+  coletorApi.getLotesFechados(ordemAtivaId).then(setHistoricoLotes);
+}, [ordemAtivaId]);
+```
+
+**Handlers reescritos:**
+
+| Handler | Antes | Depois |
+|---|---|---|
+| [handleAutoScan](file:///c:/xampp/htdocs/apontamento/src/App.tsx#177-211) | resolve local | `coletorApi.scan()` |
+| `handleAbrirLote` | cria objeto local | `coletorApi.abrirLote()` → `setLoteAtivo` |
+| [handleAddRolo](file:///c:/xampp/htdocs/apontamento/src/App.tsx#98-136) | push em array | `coletorApi.apontar()` → atualiza totais via `lote_resumo` |
+| [handleRemoveRolo](file:///c:/xampp/htdocs/apontamento/src/App.tsx#137-150) | filter local | `coletorApi.estornar()` → refetch totais |
+| [handleCloseLote](file:///c:/xampp/htdocs/apontamento/src/App.tsx#151-163) | move p/ histórico | `coletorApi.fecharLote()` → `setLoteAtivo(null)` + append `historicoLotes` |
+
+**Remover:**
+```typescript
+// Remover este useEffect:
+useEffect(() => {
+  localStorage.setItem('historicoLotes', JSON.stringify(appState.historicoLotes));
+}, [appState.historicoLotes]);
+```
+
+### 2D — [DesktopView](file:///c:/xampp/htdocs/apontamento/src/components/DesktopView.tsx#43-607) e `BillingView`
+
+#### [MODIFY] [DesktopView.tsx](file:///c:/xampp/htdocs/apontamento/src/components/DesktopView.tsx)
+- Usar `loteAtivo` (LoteAPI) para totais em tempo real
+- Prop `historicoLotes` passa a ser `LoteAPI[]` — adapter para [LoteFechado](file:///c:/xampp/htdocs/apontamento/src/types.ts#49-63) onde necessário
+
+#### [MODIFY] [BillingView.tsx](file:///c:/xampp/htdocs/apontamento/src/components/BillingView.tsx)
+- Listar `historicoLotes` (FECHADOS) vindos da API em vez do localStorage
+
+---
+
+## Ordem de Implementação
+
+```
+1. [Backend]  LoteRepository::findAll()
+2. [Backend]  LoteService::listar()
+3. [Backend]  LoteController::index()
+4. [Backend]  Registrar GET /api/v1/lotes em v1.php
+5. [Frontend] types.ts — adicionar interfaces de API
+6. [Frontend] coletorApi.ts — criar serviço
+7. [Frontend] App.tsx — substituir handlers + remover localStorage
+8. [Frontend] DesktopView.tsx — adaptar para LoteAPI
+9. [Frontend] BillingView.tsx — listar fechados da API
+```
+
+---
+
+## Verificação
+
+| Cenário | Esperado |
+|---|---|
+| Reload da página com lote aberto | Lote recuperado da API, não perdido |
+| Reload da página com histórico | Histórico carregado da API |
+| Apontar rolo → totais | Totais vindos de `lote_resumo` (não calculados no front) |
+| Fechar lote → histórico | Lote aparece em `/lotes?status=FECHADO` |
+| localStorage `historicoLotes` | **Ausente** após migração |
+
+> [!IMPORTANT]
+> Após concluir o passo 7 do frontend, remover a linha de
+> `localStorage.setItem('historicoLotes', ...)` **e** fazer um
+> `localStorage.removeItem('historicoLotes')` no carregamento inicial
+> para limpar dados legados nos navegadores dos usuários.

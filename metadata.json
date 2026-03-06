@@ -1,0 +1,8 @@
+
+{
+  "name": "Smart Checklist Aliança",
+  "description": "Plataforma Industrial Tech de inspeção inteligente e conformidade técnica.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

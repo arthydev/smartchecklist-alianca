@@ -1,0 +1,59 @@
+{
+  "_comment": "Sample fictício para migração. Não usar em produção.",
+  "managerId": "mgr-001",
+  "items": [
+    {
+      "id": 1,
+      "description": "Freio operacional",
+      "area": "OPERACAO"
+    },
+    {
+      "id": 2,
+      "description": "Documentação da carga",
+      "area": "QUALIDADE"
+    }
+  ],
+  "substitute": {
+    "name": "Gestor Substituto",
+    "phone": "5511999990000",
+    "isActive": true
+  },
+  "equipment": [
+    {
+      "id": "eq-001",
+      "code": "EQ-TR-01",
+      "description": "Trator de pátio",
+      "active": true,
+      "type": "PRIMARY",
+      "managerId": "mgr-001",
+      "category": "TRATOR"
+    }
+  ],
+  "absences": [
+    {
+      "id": "abs-001",
+      "entityId": "op-009",
+      "type": "USER",
+      "reason": "LEAVE",
+      "startDate": "2026-03-10",
+      "endDate": "2026-03-12",
+      "managerId": "mgr-001"
+    }
+  ],
+  "scrapRecipients": [
+    "faturamento@example.com",
+    "logistica@example.com"
+  ],
+  "scrapClients": [
+    "CLIENTE_EXEMPLO_A",
+    "CLIENTE_EXEMPLO_B"
+  ],
+  "ui": {
+    "theme": "light",
+    "enabledChecklists": [
+      "OPERACAO",
+      "QUALIDADE",
+      "SUCATA"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "_comment": "Sample fictício para migração. Não usar em produção.",
+  "id": "chk-ql-001",
+  "managerId": "mgr-001",
+  "userId": "ql-001",
+  "userName": "Inspetor Qualidade",
+  "date": "2026-03-05",
+  "equipmentNo": "CARRETA-22",
+  "area": "QUALIDADE",
+  "shift": "B",
+  "approvalStatus": "PENDING",
+  "createdAt": 1772710800000,
+  "observations": "Carga com uma não conformidade de amarração.",
+  "evidence": [
+    "data:image/png;base64,BBB..."
+  ],
+  "data": {
+    "inspectionBlocks": {
+      "estrutura": [
+        {
+          "question": "As travas laterais estão íntegras?",
+          "status": "C"
+        }
+      ],
+      "carga": [
+        {
+          "question": "Carga está corretamente amarrada?",
+          "status": "NC",
+          "evidence": "data:image/png;base64,BBB...",
+          "note": "Ajustar cinta traseira"
+        }
+      ]
+    },
+    "qualidade": {
+      "validatedBy": "Supervisor QHSE",
+      "validationStatus": "PENDING_REVIEW"
+    },
+    "brasiltec": {
+      "present": false,
+      "justification": "Colaborador ausente no turno"
+    }
+  }
+}

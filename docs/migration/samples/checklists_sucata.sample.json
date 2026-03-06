@@ -1,0 +1,34 @@
+{
+  "_comment": "Sample fictício para migração. Não usar em produção.",
+  "id": "chk-sc-001",
+  "managerId": "mgr-001",
+  "userId": "sc-001",
+  "userName": "Operador Sucata",
+  "date": "2026-03-05",
+  "equipmentNo": "CAC-09",
+  "area": "SUCATA",
+  "shift": "Administrativo",
+  "approvalStatus": "APPROVED",
+  "createdAt": 1772714400000,
+  "observations": "Carga liberada para faturamento.",
+  "evidence": [
+    "data:image/png;base64,SUP...",
+    "data:image/png;base64,LAT...",
+    "data:image/png;base64,FRO...",
+    "data:image/png;base64,REA..."
+  ],
+  "data": {
+    "secondWeightTime": "14:30",
+    "client": "CLIENTE_EXEMPLO",
+    "bucketNumber": "CAC-09",
+    "bucketType": "BAIXA",
+    "bucketTare": 1250,
+    "ticketNumber": "TK-9981",
+    "truckPlate": "ABC1D23",
+    "driverName": "Motorista Exemplo",
+    "driverCpf": "00011122233",
+    "truckTare": 8900,
+    "netWeight": 13200,
+    "obs": "Peso dentro do esperado"
+  }
+}

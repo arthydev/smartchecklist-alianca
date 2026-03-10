@@ -209,7 +209,7 @@ const ScrapInspectionForm: React.FC<Props> = ({ onSave, user, settings }) => {
 
 Segue a ficha de saida de sucata devidamente preenchida e ticket de pesagem do veiculo aguardando a nota fiscal para liberacao.
 
-- 1 cacamba ${formData.bucketType} de N ${formData.bucketNumber} com ${(Number(formData.netWeight) / 1000).toFixed(3)} ton. (a faturar no CT ${formData.ticketNumber}).
+- 1 cacamba ${formData.bucketType} de N ${formData.bucketNumber} com ${(Number(formData.netWeight) / 1000).toFixed(3)} ton. (Ticket da Balança: ${formData.ticketNumber}).
 
 Segue abaixo dados do motorista em operacao na planta Acos Alianca.
 - ${formData.driverName} (${formData.driverCpf})

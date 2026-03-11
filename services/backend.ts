@@ -1,12 +1,52 @@
 
-import { ChecklistEntry, AppSettings, Equipment, ChecklistItem, ApprovalStatus, User, Absence } from '../types';
+import { ChecklistEntry, AppSettings, Equipment, ChecklistItem, ApprovalStatus, User, Absence, ScrapClientDirectoryEntry } from '../types';
 import { CHECKLIST_ITEMS } from '../constants';
 
 const configuredBase = (import.meta.env.VITE_API_BASE_URL || '').trim();
-const API_URL = (configuredBase !== '' ? configuredBase : '/api').replace(/\/$/, '');
+
+const normalizeApiBaseUrl = (value: string): string => {
+  if (value === '') {
+    return '/api';
+  }
+
+  if (value.startsWith('/')) {
+    return value.replace(/\/$/, '');
+  }
+
+  if (/^https?:\/\//i.test(value)) {
+    return value.replace(/\/$/, '');
+  }
+
+  // Support host:port/path values accidentally configured without protocol.
+  if (/^[a-z0-9.-]+(?::\d+)?(\/.*)?$/i.test(value)) {
+    return `http://${value}`.replace(/\/$/, '');
+  }
+
+  return value.replace(/\/$/, '');
+};
+
+const API_URL = normalizeApiBaseUrl(configuredBase);
 console.log('API base URL:', API_URL);
 
 class BackendService {
+  private normalizeScrapDirectory(source: any): ScrapClientDirectoryEntry[] {
+    if (Array.isArray(source.scrapDirectory)) {
+      return source.scrapDirectory
+        .filter((entry: any) => entry && typeof entry === 'object')
+        .map((entry: any, index: number) => ({
+          id: typeof entry.id === 'string' && entry.id.trim() !== '' ? entry.id : `SCRAP-${index + 1}`,
+          client: typeof entry.client === 'string' ? entry.client.trim().toUpperCase() : '',
+          recipients: Array.isArray(entry.recipients)
+            ? entry.recipients.map((value: any) => String(value).trim()).filter(Boolean)
+            : [],
+          active: entry.active !== false,
+        }))
+        .filter((entry) => entry.client !== '');
+    }
+
+    return [];
+  }
+
   private async parseJsonSafe(response: Response): Promise<any | null> {
     try {
       return await response.json();
@@ -43,6 +83,7 @@ class BackendService {
       items: Array.isArray(source.items) ? source.items : [],
       equipment: Array.isArray(source.equipment) ? source.equipment : [],
       absences: Array.isArray(source.absences) ? source.absences : [],
+      scrapDirectory: this.normalizeScrapDirectory(source),
       substitute: {
         name: typeof substitute.name === 'string' ? substitute.name : '',
         phone: typeof substitute.phone === 'string' ? substitute.phone : '',

@@ -103,6 +103,10 @@ const ScrapInspectionForm: React.FC<Props> = ({ onSave, user, settings }) => {
     () => [evidences.superior, evidences.lateral, evidences.frontal, evidences.rear, evidences.ticketScale],
     [evidences]
   );
+  const availableClients = useMemo(
+    () => (settings.scrapDirectory || []).filter((entry) => entry.active !== false),
+    [settings.scrapDirectory]
+  );
 
   const startWebcam = async (slot: keyof EvidenceState) => {
     try {
@@ -202,14 +206,15 @@ const ScrapInspectionForm: React.FC<Props> = ({ onSave, user, settings }) => {
   });
 
   const handleEmail = (entry: ChecklistEntry) => {
-    const recipients = settings.scrapRecipients ? settings.scrapRecipients.join(';') : '';
+    const selectedClient = availableClients.find((item) => item.client === formData.client);
+    const recipients = selectedClient?.recipients?.length ? selectedClient.recipients.join(';') : '';
     const subject = `RES: Saldo de sucata ${new Date().toLocaleDateString('pt-BR')}`;
 
     const body = `Bom dia !!!
 
 Segue a ficha de saida de sucata devidamente preenchida e ticket de pesagem do veiculo aguardando a nota fiscal para liberacao.
 
-- 1 cacamba ${formData.bucketType} de N ${formData.bucketNumber} com ${(Number(formData.netWeight) / 1000).toFixed(3)} ton. (a faturar no CT ${formData.ticketNumber}).
+- 1 cacamba ${formData.bucketType} de N ${formData.bucketNumber} com ${(Number(formData.netWeight) / 1000).toFixed(3)} ton. (Ticket da Balança: ${formData.ticketNumber}).
 
 Segue abaixo dados do motorista em operacao na planta Acos Alianca.
 - ${formData.driverName} (${formData.driverCpf})
@@ -217,6 +222,10 @@ Segue abaixo dados do motorista em operacao na planta Acos Alianca.
 
 Atenciosamente,
 ${entry.userName}`;
+
+    if (!recipients) {
+      alert(`O cliente ${formData.client || 'selecionado'} não possui destinatários configurados. O e-mail será aberto sem o campo "Para".`);
+    }
 
     window.open(`mailto:${recipients}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
   };
@@ -401,9 +410,9 @@ ${entry.userName}`;
               required
             >
               <option value="">Selecione o Cliente...</option>
-              {settings.scrapClients && settings.scrapClients.length > 0 ? (
-                settings.scrapClients.map((client) => (
-                  <option key={client} value={client}>{client}</option>
+              {availableClients.length > 0 ? (
+                availableClients.map((client) => (
+                  <option key={client.id} value={client.client}>{client.client}</option>
                 ))
               ) : (
                 <option value="" disabled>NENHUM CLIENTE CADASTRADO</option>

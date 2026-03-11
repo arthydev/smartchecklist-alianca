@@ -17,8 +17,6 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
   }, [user]);
 
   const [waPhone, setWaPhone] = useState(settings.substitute?.phone || '');
-  const [scrapRecipients, setScrapRecipients] = useState('');
-  const [newClient, setNewClient] = useState('');
 
   const [users, setUsers] = useState<User[]>([]);
   const [newUser, setNewUser] = useState({
@@ -43,8 +41,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
 
   useEffect(() => {
     setWaPhone(settings.substitute?.phone || '');
-    setScrapRecipients((settings.scrapRecipients || []).join('; '));
-  }, [settings.substitute?.phone, settings.scrapRecipients]);
+  }, [settings.substitute?.phone]);
 
   useEffect(() => {
     if (user?.area) {
@@ -92,49 +89,15 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
     alert('Telefone de WhatsApp salvo.');
   };
 
-  const saveScrapRecipients = () => {
-    const recipients = scrapRecipients
-      .split(';')
-      .map(v => v.trim())
-      .filter(Boolean);
 
-    onUpdate({
-      ...settings,
-      scrapRecipients: recipients,
-    });
-    alert('Destinatários de sucata salvos.');
-  };
 
-  const addScrapClient = () => {
-    const value = newClient.trim().toUpperCase();
-    if (!value) return;
-
-    const current = settings.scrapClients || [];
-    if (current.includes(value)) {
-      setNewClient('');
-      return;
-    }
-
-    onUpdate({
-      ...settings,
-      scrapClients: [...current, value],
-    });
-    setNewClient('');
-  };
-
-  const removeScrapClient = (client: string) => {
-    onUpdate({
-      ...settings,
-      scrapClients: (settings.scrapClients || []).filter(c => c !== client),
-    });
-  };
 
   const createUser = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!managerId) return;
 
     if (!newUser.name.trim() || !newUser.username.trim() || !newUser.password.trim()) {
-      alert('Preencha nome, usuário e senha.');
+      alert('Preencha nome, usuï¿½rio e senha.');
       return;
     }
 
@@ -160,19 +123,19 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
       });
 
       await refreshUsers();
-      alert('Usuário criado.');
+      alert('Usuï¿½rio criado.');
     } catch (err: any) {
-      alert(err?.message || 'Falha ao criar usuário.');
+      alert(err?.message || 'Falha ao criar usuï¿½rio.');
     }
   };
 
   const removeUser = async (id: string) => {
-    if (!confirm('Remover este usuário?')) return;
+    if (!confirm('Remover este usuï¿½rio?')) return;
     try {
       await backend.removeUser(id);
       await refreshUsers();
     } catch (err: any) {
-      alert(err?.message || 'Falha ao remover usuário.');
+      alert(err?.message || 'Falha ao remover usuï¿½rio.');
     }
   };
 
@@ -180,7 +143,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
     if (!managerId) return;
 
     if (!absenceForm.entityId || !absenceForm.startDate || !absenceForm.endDate) {
-      alert('Selecione entidade e período.');
+      alert('Selecione entidade e perï¿½odo.');
       return;
     }
 
@@ -205,9 +168,9 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
         endDate: '',
       });
 
-      alert('Ausência/manutenção registrada.');
+      alert('Ausï¿½ncia/manutenï¿½ï¿½o registrada.');
     } catch (err: any) {
-      alert(err?.message || 'Falha ao registrar ausência/manutenção.');
+      alert(err?.message || 'Falha ao registrar ausï¿½ncia/manutenï¿½ï¿½o.');
     }
   };
 
@@ -218,7 +181,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
       const fresh = await backend.getManagerSettings(managerId);
       onUpdate(fresh);
     } catch (err: any) {
-      alert(err?.message || 'Falha ao remover ausência/manutenção.');
+      alert(err?.message || 'Falha ao remover ausï¿½ncia/manutenï¿½ï¿½o.');
     }
   };
 
@@ -259,7 +222,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
   return (
     <div className="space-y-8 pb-20 max-w-7xl mx-auto transition-colors duration-300">
       <div className="flex items-center justify-between pb-6 border-b-2 border-slate-100 dark:border-slate-800">
-        <h2 className="text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tighter">Configurações Gerais</h2>
+        <h2 className="text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tighter">Configuraï¿½ï¿½es Gerais</h2>
       </div>
 
       {user?.area !== 'SUCATA' && (
@@ -284,58 +247,9 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
           </div>
         </section>
       )}
-
       <section className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/30 dark:shadow-none space-y-5">
         <h3 className="font-black text-slate-900 dark:text-slate-100 uppercase text-xs tracking-widest flex items-center gap-3">
-          <MessageSquare size={18} className="text-emerald-500" /> Configuração Sucata
-        </h3>
-
-        <textarea
-          value={scrapRecipients}
-          onChange={e => setScrapRecipients(e.target.value)}
-          className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold outline-none text-slate-900 dark:text-slate-100"
-          placeholder="destino1@empresa.com; destino2@empresa.com"
-          rows={3}
-        />
-        <button
-          onClick={saveScrapRecipients}
-          className="px-8 py-3 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all"
-        >
-          Salvar Destinatários
-        </button>
-
-        <div className="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-          <div className="flex gap-3">
-            <input
-              value={newClient}
-              onChange={e => setNewClient(e.target.value)}
-              className="flex-1 p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold outline-none text-slate-900 dark:text-slate-100"
-              placeholder="Cliente / destino"
-            />
-            <button
-              onClick={addScrapClient}
-              className="px-6 py-3 bg-slate-900 dark:bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black dark:hover:bg-emerald-700 transition-all"
-            >
-              Adicionar
-            </button>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {(settings.scrapClients || []).map(client => (
-              <div key={client} className="px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-black text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                {client}
-                <button className="text-red-500" onClick={() => removeScrapClient(client)}>
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/30 dark:shadow-none space-y-5">
-        <h3 className="font-black text-slate-900 dark:text-slate-100 uppercase text-xs tracking-widest flex items-center gap-3">
-          <Calendar size={18} className="text-emerald-500" /> Ausências e Manutenções
+          <Calendar size={18} className="text-emerald-500" /> Ausï¿½ncias e Manutenï¿½ï¿½es
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -344,7 +258,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
             onChange={e => setAbsenceForm(prev => ({ ...prev, type: e.target.value as 'USER' | 'EQUIPMENT', entityId: '' }))}
             className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold"
           >
-            <option value="USER">Usuário</option>
+            <option value="USER">Usuï¿½rio</option>
             <option value="EQUIPMENT">Equipamento</option>
           </select>
 
@@ -364,9 +278,9 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
             onChange={e => setAbsenceForm(prev => ({ ...prev, reason: e.target.value as AbsenceReason }))}
             className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold"
           >
-            <option value="VACATION">Férias</option>
-            <option value="LEAVE">Licença</option>
-            <option value="MAINTENANCE">Manutenção</option>
+            <option value="VACATION">Fï¿½rias</option>
+            <option value="LEAVE">Licenï¿½a</option>
+            <option value="MAINTENANCE">Manutenï¿½ï¿½o</option>
           </select>
 
           <input
@@ -387,14 +301,14 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
           onClick={addAbsence}
           className="px-8 py-3 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all"
         >
-          Adicionar Ausência
+          Adicionar Ausï¿½ncia
         </button>
 
         <div className="space-y-2">
           {settings.absences.map(a => (
             <div key={a.id} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-between">
               <div className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                {a.type === 'EQUIPMENT' ? 'Equipamento' : 'Usuário'} | {a.reason} | {a.startDate} até {a.endDate}
+                {a.type === 'EQUIPMENT' ? 'Equipamento' : 'Usuï¿½rio'} | {a.reason} | {a.startDate} atï¿½ {a.endDate}
               </div>
               <button className="text-red-500" onClick={() => removeAbsence(a.id)}>
                 <Trash2 size={16} />
@@ -412,7 +326,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
 
           <form onSubmit={createUser} className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <input value={newUser.name} onChange={e => setNewUser(prev => ({ ...prev, name: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Nome" />
-            <input value={newUser.username} onChange={e => setNewUser(prev => ({ ...prev, username: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Usuário" />
+            <input value={newUser.username} onChange={e => setNewUser(prev => ({ ...prev, username: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Usuï¿½rio" />
             <input type="password" value={newUser.password} onChange={e => setNewUser(prev => ({ ...prev, password: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Senha" />
             <input value={newUser.email} onChange={e => setNewUser(prev => ({ ...prev, email: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="E-mail" />
             <select value={newUser.role} onChange={e => setNewUser(prev => ({ ...prev, role: e.target.value as Role }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
@@ -423,7 +337,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
               {AREAS.map(area => <option key={area} value={area}>{area}</option>)}
             </select>
             <button type="submit" className="md:col-span-2 px-8 py-3 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all">
-              Criar Usuário
+              Criar Usuï¿½rio
             </button>
           </form>
 

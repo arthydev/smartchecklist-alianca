@@ -51,13 +51,19 @@ export interface SubstituteConfig {
   isActive: boolean;
 }
 
+export interface ScrapClientDirectoryEntry {
+  id: string;
+  client: string;
+  recipients: string[];
+  active?: boolean;
+}
+
 export interface AppSettings {
   items: (Omit<ChecklistItem, 'status'> & { area?: string; equipmentId?: string })[];
   equipment: Equipment[];
   substitute: SubstituteConfig;
   absences: Absence[];
-  scrapRecipients?: string[];
-  scrapClients?: string[];
+  scrapDirectory?: ScrapClientDirectoryEntry[];
 }
 
 export interface BrasiltecUser {
@@ -111,6 +117,7 @@ export enum AppView {
   DASHBOARD = 'DASHBOARD',
   NEW_CHECK = 'NEW_CHECK',
   ASSETS = 'ASSETS',
+  SCRAP_DIRECTORY = 'SCRAP_DIRECTORY',
   HISTORY = 'HISTORY',
   VALIDATION = 'VALIDATION',
   SETTINGS = 'SETTINGS'

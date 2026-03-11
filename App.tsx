@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard, ClipboardCheck, History, ShieldCheck, Menu, X, Settings, LogOut, Moon, Sun, Box
+  LayoutDashboard, ClipboardCheck, History, ShieldCheck, Menu, X, Settings, LogOut, Moon, Sun, Box, Mail
 } from 'lucide-react';
 import { AppView, ChecklistEntry, User, AppSettings } from './types';
 import Dashboard from './components/Dashboard';
@@ -15,6 +15,7 @@ import HistoryView from './components/HistoryView';
 import ValidationView from './components/ValidationView';
 import SettingsView from './components/SettingsView';
 import AssetsManagementView from './components/AssetsManagementView';
+import ScrapDirectoryManagementView from './components/ScrapDirectoryManagementView';
 import Login from './components/Login';
 import Logo from './components/Logo';
 import { backend } from './services/backend';
@@ -27,7 +28,7 @@ const App: React.FC = () => {
   const [authChecked, setAuthChecked] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [checklists, setChecklists] = useState<ChecklistEntry[]>([]);
-  const [settings, setSettings] = useState<AppSettings>({ items: [], equipment: [], substitute: { name: '', phone: '', isActive: false }, absences: [] });
+  const [settings, setSettings] = useState<AppSettings>({ items: [], equipment: [], substitute: { name: '', phone: '', isActive: false }, absences: [], scrapDirectory: [] });
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const savedTheme = localStorage.getItem('alianca_theme');
     return (savedTheme as 'light' | 'dark') || 'light';
@@ -182,6 +183,7 @@ const App: React.FC = () => {
           <NavItem view={AppView.HISTORY} icon={History} label="Histórico" />
           <NavItem view={AppView.VALIDATION} icon={ShieldCheck} label="Validação Técnica" hidden={currentUser?.role !== 'MANAGER' || currentUser?.area === 'SUCATA'} />
           <NavItem view={AppView.ASSETS} icon={Box} label="Ativos e Itens" hidden={currentUser?.role !== 'MANAGER' || currentUser?.area === 'SUCATA'} />
+          <NavItem view={AppView.SCRAP_DIRECTORY} icon={Mail} label="Clientes de Sucata" hidden={currentUser?.area !== 'SUCATA'} />
           <NavItem view={AppView.SETTINGS} icon={Settings} label="Configurações" hidden={currentUser?.role !== 'MANAGER'} />
 
           <div className="pt-4 mt-4 border-t border-slate-50 dark:border-slate-800">
@@ -239,6 +241,7 @@ const App: React.FC = () => {
           {currentView === AppView.HISTORY && <HistoryView checklists={checklists} user={currentUser!} />}
           {currentView === AppView.VALIDATION && <ValidationView checklists={checklists} onUpdate={handleUpdateChecklist} currentUser={currentUser} />}
           {currentView === AppView.ASSETS && <AssetsManagementView settings={settings} onUpdate={handleUpdateSettings} user={currentUser} />}
+          {currentView === AppView.SCRAP_DIRECTORY && <ScrapDirectoryManagementView settings={settings} onUpdate={handleUpdateSettings} user={currentUser} />}
           {currentView === AppView.SETTINGS && <SettingsView settings={settings} onUpdate={handleUpdateSettings} user={currentUser} />}
         </div>
       </main>

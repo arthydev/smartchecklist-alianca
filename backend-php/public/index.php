@@ -12,6 +12,7 @@ require_once __DIR__ . '/../src/Repositories/AbsencesRepository.php';
 require_once __DIR__ . '/../src/Repositories/BrasiltecRepository.php';
 require_once __DIR__ . '/../src/Repositories/ChecklistsRepository.php';
 require_once __DIR__ . '/../src/Repositories/EquipmentsRepository.php';
+require_once __DIR__ . '/../src/Repositories/ScrapDirectoryRepository.php';
 require_once __DIR__ . '/../src/Repositories/SettingsRepository.php';
 require_once __DIR__ . '/../src/Repositories/UsersRepository.php';
 require_once __DIR__ . '/../src/Response.php';
@@ -57,10 +58,42 @@ function normalizeSettingsPayload(mixed $payload): array
 {
     $source = is_array($payload) ? $payload : [];
     $normalized = $source;
+    unset($normalized['scrapClients'], $normalized['scrapRecipients']);
 
     $normalized['items'] = isset($source['items']) && is_array($source['items']) ? $source['items'] : [];
     $normalized['equipment'] = isset($source['equipment']) && is_array($source['equipment']) ? $source['equipment'] : [];
     $normalized['absences'] = isset($source['absences']) && is_array($source['absences']) ? $source['absences'] : [];
+    $normalized['scrapDirectory'] = [];
+
+    if (isset($source['scrapDirectory']) && is_array($source['scrapDirectory'])) {
+        foreach ($source['scrapDirectory'] as $index => $entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+
+            $client = strtoupper(trim((string) ($entry['client'] ?? '')));
+            if ($client === '') {
+                continue;
+            }
+
+            $recipients = [];
+            if (isset($entry['recipients']) && is_array($entry['recipients'])) {
+                foreach ($entry['recipients'] as $recipient) {
+                    $normalizedRecipient = trim((string) $recipient);
+                    if ($normalizedRecipient !== '') {
+                        $recipients[] = $normalizedRecipient;
+                    }
+                }
+            }
+
+            $normalized['scrapDirectory'][] = [
+                'id' => trim((string) ($entry['id'] ?? '')) !== '' ? (string) $entry['id'] : 'SCRAP-' . ($index + 1),
+                'client' => $client,
+                'recipients' => array_values(array_unique($recipients)),
+                'active' => !array_key_exists('active', $entry) || (bool) $entry['active'],
+            ];
+        }
+    }
 
     $substitute = isset($source['substitute']) && is_array($source['substitute']) ? $source['substitute'] : [];
     $normalized['substitute'] = [
@@ -194,6 +227,7 @@ $router->get('/api/settings', requireAuth(static function (array $user): void {
     $repo = new SettingsRepository();
     $equipmentsRepo = new EquipmentsRepository();
     $absencesRepo = new AbsencesRepository();
+    $scrapDirectoryRepo = new ScrapDirectoryRepository();
     $userManagerId = currentManagerId($user);
     $role = (string) ($user['role'] ?? '');
     $requested = normalizeManagerIdInput($_GET['managerId'] ?? null);
@@ -217,12 +251,15 @@ $router->get('/api/settings', requireAuth(static function (array $user): void {
     $normalized = normalizeSettingsPayload($payload);
     $normalized['equipment'] = $equipmentsRepo->listByManagerId($targetManagerId);
     $normalized['absences'] = $absencesRepo->listByManagerId($targetManagerId);
+    $normalized['scrapDirectory'] = $scrapDirectoryRepo->listByManagerId($targetManagerId);
     Response::json($normalized);
 }));
 
 $router->post('/api/settings', requireAuth(static function (array $user): void {
     $repo = new SettingsRepository();
     $equipmentsRepo = new EquipmentsRepository();
+    $absencesRepo = new AbsencesRepository();
+    $scrapDirectoryRepo = new ScrapDirectoryRepository();
     $userManagerId = currentManagerId($user);
     $role = (string) ($user['role'] ?? '');
 
@@ -252,20 +289,30 @@ $router->post('/api/settings', requireAuth(static function (array $user): void {
         $settingsPayload = $payload['updates'];
     }
     unset($settingsPayload['managerId']);
+    $hasScrapDirectoryUpdate = array_key_exists('scrapDirectory', $settingsPayload);
+    $scrapDirectoryPayload = $hasScrapDirectoryUpdate
+        ? (normalizeSettingsPayload(['scrapDirectory' => $settingsPayload['scrapDirectory']])['scrapDirectory'] ?? [])
+        : [];
 
     $existing = $repo->findByManagerId($targetManagerId);
     $existingPayload = is_array($existing['payload'] ?? null) ? $existing['payload'] : [];
     $mergedPayload = mergeSettingsPayload($existingPayload, $settingsPayload);
     $normalizedToSave = normalizeSettingsPayload($mergedPayload);
+    unset($normalizedToSave['scrapDirectory'], $normalizedToSave['scrapClients'], $normalizedToSave['scrapRecipients']);
 
     try {
         $saved = $repo->upsert($targetManagerId, $normalizedToSave);
         if (isset($normalizedToSave['equipment']) && is_array($normalizedToSave['equipment'])) {
             $equipmentsRepo->replaceForManager($targetManagerId, $normalizedToSave['equipment']);
         }
+        if ($hasScrapDirectoryUpdate) {
+            $scrapDirectoryRepo->replaceForManager($targetManagerId, is_array($scrapDirectoryPayload) ? $scrapDirectoryPayload : []);
+        }
 
         $normalizedResponse = normalizeSettingsPayload($saved);
         $normalizedResponse['equipment'] = $equipmentsRepo->listByManagerId($targetManagerId);
+        $normalizedResponse['absences'] = $absencesRepo->listByManagerId($targetManagerId);
+        $normalizedResponse['scrapDirectory'] = $scrapDirectoryRepo->listByManagerId($targetManagerId);
         Response::json($normalizedResponse);
     } catch (RuntimeException $e) {
         if ($e->getCode() === 403 || str_contains($e->getMessage(), 'Forbidden')) {

@@ -44,6 +44,12 @@ php backend-php/bin/migrate.php
 php backend-php/bin/seed.php
 ```
 
+Reset destrutivo do banco, preservando `_migrations` e recriando apenas o `ADMIN`:
+
+```powershell
+php backend-php/bin/reset_database.php
+```
+
 Comportamento:
 - Migrations aplicadas são registradas em `_migrations`.
 - Seeders aplicados são registrados em `_seed_runs`.

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { AppSettings, EquipmentType, User } from '../types';
 import { AREAS, EQUIPMENT_CATEGORIES } from '../constants.tsx';
-import { Box, CheckCircle, Plus, Trash2 } from 'lucide-react';
+import { Box, CheckCircle, ChevronDown, ChevronUp, Copy, Plus, Trash2 } from 'lucide-react';
 
 interface Props {
   settings: AppSettings;
@@ -13,6 +13,10 @@ const AssetsManagementView: React.FC<Props> = ({ settings, onUpdate, user }) => 
   const [newItem, setNewItem] = useState('');
   const [newItemArea, setNewItemArea] = useState(user?.area || AREAS[0]);
   const [itemEquipmentId, setItemEquipmentId] = useState('');
+  const [itemsFilterEquipmentId, setItemsFilterEquipmentId] = useState('');
+  const [copySourceEquipmentId, setCopySourceEquipmentId] = useState('');
+  const [copyTargetEquipmentId, setCopyTargetEquipmentId] = useState('');
+  const [isCopyBoxOpen, setIsCopyBoxOpen] = useState(false);
 
   const [newEqCode, setNewEqCode] = useState('');
   const [newEqDesc, setNewEqDesc] = useState(EQUIPMENT_CATEGORIES[0]);
@@ -24,6 +28,14 @@ const AssetsManagementView: React.FC<Props> = ({ settings, onUpdate, user }) => 
     () => settings.equipment.filter(e => e.active),
     [settings.equipment]
   );
+  const filteredItems = useMemo(
+    () => itemsFilterEquipmentId
+      ? settings.items.filter(item => item.equipmentId === itemsFilterEquipmentId)
+      : settings.items,
+    [settings.items, itemsFilterEquipmentId]
+  );
+
+  const normalizeQuestion = (value: string) => value.trim().toLocaleLowerCase();
 
   const addInspectionItem = () => {
     if (!newItem.trim()) {
@@ -51,6 +63,52 @@ const AssetsManagementView: React.FC<Props> = ({ settings, onUpdate, user }) => 
 
   const removeInspectionItem = (id: number) => {
     onUpdate({ ...settings, items: settings.items.filter(i => i.id !== id) });
+  };
+
+  const copyInspectionItems = () => {
+    if (!copySourceEquipmentId || !copyTargetEquipmentId) {
+      alert('Selecione o equipamento de origem e o equipamento de destino.');
+      return;
+    }
+
+    if (copySourceEquipmentId === copyTargetEquipmentId) {
+      alert('Origem e destino precisam ser diferentes.');
+      return;
+    }
+
+    const sourceItems = settings.items.filter(item => item.equipmentId === copySourceEquipmentId);
+    if (sourceItems.length === 0) {
+      alert('O equipamento de origem nao possui perguntas para copiar.');
+      return;
+    }
+
+    const existingDescriptions = new Set(
+      settings.items
+        .filter(item => item.equipmentId === copyTargetEquipmentId)
+        .map(item => normalizeQuestion(item.description))
+    );
+
+    const copiedItems = sourceItems
+      .filter(item => !existingDescriptions.has(normalizeQuestion(item.description)))
+      .map((item, index) => ({
+        ...item,
+        id: Date.now() + index,
+        equipmentId: copyTargetEquipmentId,
+      }));
+
+    if (copiedItems.length === 0) {
+      alert('Nenhuma pergunta nova foi copiada. O equipamento de destino ja possui todas as perguntas da origem.');
+      setItemsFilterEquipmentId(copyTargetEquipmentId);
+      return;
+    }
+
+    const skippedCount = sourceItems.length - copiedItems.length;
+    onUpdate({
+      ...settings,
+      items: [...settings.items, ...copiedItems],
+    });
+    setItemsFilterEquipmentId(copyTargetEquipmentId);
+    alert(`Copiadas ${copiedItems.length} pergunta(s) para o equipamento de destino. ${skippedCount} pergunta(s) foram ignoradas por ja existirem.`);
   };
 
   const addEquipment = () => {
@@ -92,68 +150,182 @@ const AssetsManagementView: React.FC<Props> = ({ settings, onUpdate, user }) => 
         <h3 className="font-black text-slate-900 dark:text-slate-100 uppercase text-xs tracking-widest flex items-center gap-3">
           <CheckCircle size={20} className="text-emerald-500" /> Itens de Inspeção
         </h3>
-        <div className="flex flex-col gap-3">
-          <div className="flex gap-3">
-            <input
-              type="text"
-              value={newItem}
-              onChange={e => setNewItem(e.target.value)}
-              className="flex-1 p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[1.2rem] text-sm font-bold outline-none text-slate-900 dark:text-slate-100"
-              placeholder="Nova pergunta..."
-            />
-            <button
-              onClick={addInspectionItem}
-              className="p-4 bg-emerald-600 text-white rounded-[1.2rem] shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all"
-            >
-              <Plus size={24} />
-            </button>
-          </div>
-          <div className="space-y-1">
-            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Área Dedicada</label>
-            {user?.area ? (
-              <div className="w-full p-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-500 cursor-not-allowed">
-                {user.area} (Automático)
-              </div>
-            ) : (
-              <select
-                value={newItemArea}
-                onChange={e => setNewItemArea(e.target.value)}
-                className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+        <div className="flex flex-col gap-4">
+          <div className="p-5 bg-emerald-50/70 dark:bg-emerald-950/10 border border-emerald-100 dark:border-emerald-900/30 rounded-[1.75rem] space-y-4 shadow-sm">
+            <div>
+              <p className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Nova pergunta</p>
+              <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400">Cadastre um novo item de inspeção, defina a Área responsável e vincule a pergunta ao equipamento correto.</p>
+            </div>
+            <div className="flex gap-3">
+              <input
+                type="text"
+                value={newItem}
+                onChange={e => setNewItem(e.target.value)}
+                className="flex-1 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[1.2rem] text-sm font-bold outline-none text-slate-900 dark:text-slate-100"
+                placeholder="Nova pergunta..."
+              />
+              <button
+                onClick={addInspectionItem}
+                className="p-4 bg-emerald-600 text-white rounded-[1.2rem] shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all"
               >
-                {AREAS.map(area => <option key={area} value={area}>{area}</option>)}
+                <Plus size={24} />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Área Dedicada</label>
+                {user?.area ? (
+                  <div className="w-full p-4 bg-white/80 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-500 cursor-not-allowed">
+                    {user.area} (Automático)
+                  </div>
+                ) : (
+                  <select
+                    value={newItemArea}
+                    onChange={e => setNewItemArea(e.target.value)}
+                    className="w-full p-4 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  >
+                    {AREAS.map(area => <option key={area} value={area}>{area}</option>)}
+                  </select>
+                )}
+              </div>
+              <div className="space-y-1">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Equipamento Vinculado (obrigatório)</label>
+                <select
+                  value={itemEquipmentId}
+                  onChange={e => setItemEquipmentId(e.target.value)}
+                  className="w-full p-4 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                >
+                  <option value="">Selecione o equipamento...</option>
+                  {activeEquipments.map(eq => (
+                    <option key={eq.id} value={eq.id}>{eq.code} - {eq.description}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+<div className="p-5 bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 rounded-[1.75rem] space-y-3">
+            <div>
+              <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Filtro de exibição</p>
+              <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500">Use o filtro para visualizar apenas as perguntas do equipamento desejado.</p>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Filtrar perguntas por equipamento</label>
+              <select
+                value={itemsFilterEquipmentId}
+                onChange={e => setItemsFilterEquipmentId(e.target.value)}
+                className="w-full p-4 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+              >
+                <option value="">Todos os equipamentos</option>
+                {activeEquipments.map(eq => (
+                  <option key={eq.id} value={eq.id}>{eq.code} - {eq.description}</option>
+                ))}
               </select>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 rounded-[1.75rem] overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setIsCopyBoxOpen((current) => !current)}
+              className="w-full flex items-center justify-between gap-4 p-4 text-left hover:bg-white/70 dark:hover:bg-slate-800/60 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-emerald-600">
+                  <Copy size={16} />
+                </div>
+                <div>
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Copiar perguntas entre equipamentos</p>
+                  <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                    {isCopyBoxOpen ? 'Clique para recolher' : 'Clique para expandir'}
+                  </p>
+                </div>
+              </div>
+              <div className="text-slate-400 dark:text-slate-500">
+                {isCopyBoxOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </div>
+            </button>
+            {isCopyBoxOpen && (
+              <div className="px-4 pb-4 space-y-3 border-t border-slate-100 dark:border-slate-800">
+                <div className="pt-4">
+                  <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500">Reaproveite perguntas de um equipamento em outro sem duplicar perguntas j? existentes.</p>
+                </div>
+                <div className="space-y-1 pt-2">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Equipamento de origem</label>
+                  <select
+                    value={copySourceEquipmentId}
+                    onChange={e => setCopySourceEquipmentId(e.target.value)}
+                    className="w-full p-4 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  >
+                    <option value="">Selecione o equipamento de origem...</option>
+                    {activeEquipments.map(eq => (
+                      <option key={eq.id} value={eq.id}>{eq.code} - {eq.description}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Equipamento de destino</label>
+                  <select
+                    value={copyTargetEquipmentId}
+                    onChange={e => setCopyTargetEquipmentId(e.target.value)}
+                    className="w-full p-4 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  >
+                    <option value="">Selecione o equipamento de destino...</option>
+                    {activeEquipments.map(eq => (
+                      <option key={eq.id} value={eq.id}>{eq.code} - {eq.description}</option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  onClick={copyInspectionItems}
+                  disabled={!copySourceEquipmentId || !copyTargetEquipmentId || copySourceEquipmentId === copyTargetEquipmentId}
+                  className="w-full py-4 bg-slate-900 dark:bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase shadow-xl hover:bg-black dark:hover:bg-emerald-700 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-slate-900 dark:disabled:hover:bg-emerald-600 flex items-center justify-center gap-2"
+                >
+                  <Copy size={16} /> Copiar perguntas
+                </button>
+              </div>
             )}
           </div>
-          <div className="space-y-1">
-            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Equipamento Vinculado (obrigatório)</label>
-            <select
-              value={itemEquipmentId}
-              onChange={e => setItemEquipmentId(e.target.value)}
-              className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
-            >
-              <option value="">Selecione o equipamento...</option>
-              {activeEquipments.map(eq => (
-                <option key={eq.id} value={eq.id}>{eq.code} - {eq.description}</option>
-              ))}
-            </select>
-          </div>
-          <div className="space-y-2 max-h-72 overflow-auto pr-2 custom-scrollbar">
-            {settings.items.map(item => {
-              const linkedEq = settings.equipment.find(e => e.id === item.equipmentId);
-              return (
-                <div key={item.id} className="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl group hover:bg-white dark:hover:bg-slate-800 transition-all border-l-4 border-l-transparent hover:border-l-emerald-500">
-                  <div className="flex flex-col">
-                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{item.description}</span>
-                    <span className="text-[9px] font-black text-emerald-500 uppercase tracking-tighter">
-                      {item.area} • {linkedEq?.code || 'SEM EQUIPAMENTO'}
-                    </span>
+
+          <div className="p-5 bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 rounded-[1.75rem] space-y-3">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Perguntas cadastradas</p>
+                <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500">
+                  {itemsFilterEquipmentId
+                    ? 'Exibindo perguntas do equipamento selecionado.'
+                    : 'Exibindo todas as perguntas cadastradas.'}
+                </p>
+              </div>
+              {itemsFilterEquipmentId && (
+                <span className="px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[9px] font-black uppercase tracking-widest text-emerald-600">
+                  Filtro ativo
+                </span>
+              )}
+            </div>
+            <div className="space-y-2 max-h-72 overflow-auto pr-2 custom-scrollbar">
+              {filteredItems.map(item => {
+                const linkedEq = settings.equipment.find(e => e.id === item.equipmentId);
+                return (
+                  <div key={item.id} className="flex justify-between items-center p-4 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl group hover:bg-slate-50 dark:hover:bg-slate-800 transition-all border-l-4 border-l-transparent hover:border-l-emerald-500">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{item.description}</span>
+                      <span className="text-[9px] font-black text-emerald-500 uppercase tracking-tighter">
+                        {item.area} ? {linkedEq?.code || 'SEM EQUIPAMENTO'}
+                      </span>
+                    </div>
+                    <button onClick={() => removeInspectionItem(item.id)} className="text-slate-300 dark:text-slate-600 hover:text-red-500 p-2">
+                      <Trash2 size={16} />
+                    </button>
                   </div>
-                  <button onClick={() => removeInspectionItem(item.id)} className="text-slate-300 dark:text-slate-600 hover:text-red-500 p-2">
-                    <Trash2 size={16} />
-                  </button>
+                );
+              })}
+              {filteredItems.length === 0 && (
+                <div className="p-5 bg-white dark:bg-slate-800/40 border border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-center">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nenhum item encontrado para o filtro selecionado</p>
                 </div>
-              );
-            })}
+              )}
+            </div>
           </div>
         </div>
       </div>

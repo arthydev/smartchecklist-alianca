@@ -95,6 +95,7 @@ class BackendService {
   private async request(path: string, init: RequestInit = {}): Promise<Response> {
     return fetch(`${API_URL}${path}`, {
       credentials: 'include',
+      cache: 'no-store',
       ...init,
     });
   }
@@ -130,6 +131,14 @@ class BackendService {
     } catch (e) {
       // no-op
     }
+  }
+
+  async forgotPassword(email: string, newPassword: string): Promise<void> {
+    await this.requestJson('/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, newPassword }),
+    });
   }
 
   // --- Health ---
@@ -197,7 +206,7 @@ class BackendService {
     });
   }
 
-  async updateChecklist(id: string, updates: Partial<ChecklistEntry>): Promise<void> {
+  async updateChecklist(id: string, updates: Partial<ChecklistEntry>): Promise<ChecklistEntry> {
     // Ideally we should use PATCH /checklists/:id, but for now we reuse POST (Upsert) 
     // or just assume the caller has the full object? 
     // The current UI code passes "updates" which might be partial.
@@ -217,8 +226,10 @@ class BackendService {
     // It seems `App.tsx` passes the FULL object.
 
     if ((updates as ChecklistEntry).managerId) {
-      await this.addChecklist(updates as ChecklistEntry);
+      return await this.addChecklist(updates as ChecklistEntry);
     }
+
+    throw new Error('Checklist update requires managerId');
   }
 
   // --- Settings ---
@@ -293,9 +304,10 @@ class BackendService {
     return { locked: false };
   }
   // --- Users ---
-  async getUsers(managerId: string): Promise<User[]> {
+  async getUsers(managerId?: string | null): Promise<User[]> {
     try {
-      const response = await this.request(`/users?managerId=${managerId}`);
+      const query = managerId ? `?managerId=${encodeURIComponent(managerId)}` : '';
+      const response = await this.request(`/users${query}`);
       if (!response.ok) {
         // Fallback to empty if endpoint not ready or error
         return [];

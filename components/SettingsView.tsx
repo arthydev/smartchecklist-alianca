@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { AppSettings, User, Role, Absence, AbsenceReason } from '../types';
 import { backend } from '../services/backend';
 import { AREAS } from '../constants.tsx';
-import { Calendar, MessageSquare, Plus, Trash2, Users, Wrench } from 'lucide-react';
+import { Calendar, MessageSquare, Pencil, Plus, Save, Trash2, Users, Wrench, X } from 'lucide-react';
 
 interface Props {
   settings: AppSettings;
@@ -15,6 +15,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
     if (!user) return null;
     return user.role === 'MANAGER' ? user.id : (user.managerId || null);
   }, [user]);
+  const isSuperAdmin = user?.id === '1';
 
   const [waPhone, setWaPhone] = useState(settings.substitute?.phone || '');
 
@@ -26,6 +27,16 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
     email: '',
     role: 'OPERATOR' as Role,
     area: user?.area || AREAS[0],
+  });
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [editUser, setEditUser] = useState({
+    name: '',
+    username: '',
+    password: '',
+    email: '',
+    role: 'OPERATOR' as Role,
+    area: AREAS[0],
+    managerId: '',
   });
 
   const [absenceForm, setAbsenceForm] = useState<Partial<Absence>>({
@@ -53,7 +64,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
     if (!managerId) return;
 
     const load = async () => {
-      const fetchedUsers = await backend.getUsers(managerId);
+      const fetchedUsers = await backend.getUsers(isSuperAdmin ? null : managerId);
       setUsers(fetchedUsers);
 
       if (user?.area === 'QUALIDADE') {
@@ -65,11 +76,11 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
     };
 
     void load();
-  }, [managerId, user?.area]);
+  }, [isSuperAdmin, managerId, user?.area]);
 
   const refreshUsers = async () => {
     if (!managerId) return;
-    setUsers(await backend.getUsers(managerId));
+    setUsers(await backend.getUsers(isSuperAdmin ? null : managerId));
   };
 
   const refreshBrasiltec = async () => {
@@ -96,8 +107,8 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
     e.preventDefault();
     if (!managerId) return;
 
-    if (!newUser.name.trim() || !newUser.username.trim() || !newUser.password.trim()) {
-      alert('Preencha nome, usu�rio e senha.');
+    if (!newUser.name.trim() || !newUser.username.trim() || !newUser.password.trim() || !newUser.email.trim()) {
+      alert('Preencha nome, usuário, senha e e-mail.');
       return;
     }
 
@@ -136,6 +147,64 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
       await refreshUsers();
     } catch (err: any) {
       alert(err?.message || 'Falha ao remover usu�rio.');
+    }
+  };
+
+  const startEditingUser = (target: User) => {
+    setEditingUserId(target.id);
+    setEditUser({
+      name: target.name || '',
+      username: target.username || '',
+      password: '',
+      email: target.email || '',
+      role: target.role,
+      area: target.area || AREAS[0],
+      managerId: target.managerId || '',
+    });
+  };
+
+  const cancelEditingUser = () => {
+    setEditingUserId(null);
+    setEditUser({
+      name: '',
+      username: '',
+      password: '',
+      email: '',
+      role: 'OPERATOR',
+      area: AREAS[0],
+      managerId: '',
+    });
+  };
+
+  const saveUserChanges = async (id: string) => {
+    if (!editUser.name.trim() || !editUser.username.trim() || !editUser.email.trim()) {
+      alert('Preencha nome, usuário e e-mail.');
+      return;
+    }
+
+    const payload: Partial<User> = {
+      name: editUser.name.trim(),
+      username: editUser.username.trim(),
+      email: editUser.email.trim() || undefined,
+      role: editUser.role,
+      area: editUser.area,
+    };
+
+    if (editUser.password.trim()) {
+      payload.password = editUser.password;
+    }
+
+    if (isSuperAdmin) {
+      payload.managerId = editUser.managerId.trim();
+    }
+
+    try {
+      await backend.updateUser(id, payload);
+      await refreshUsers();
+      cancelEditingUser();
+      alert('Usuário atualizado.');
+    } catch (err: any) {
+      alert(err?.message || 'Falha ao atualizar usuário.');
     }
   };
 
@@ -328,7 +397,7 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
             <input value={newUser.name} onChange={e => setNewUser(prev => ({ ...prev, name: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Nome" />
             <input value={newUser.username} onChange={e => setNewUser(prev => ({ ...prev, username: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Usu�rio" />
             <input type="password" value={newUser.password} onChange={e => setNewUser(prev => ({ ...prev, password: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Senha" />
-            <input value={newUser.email} onChange={e => setNewUser(prev => ({ ...prev, email: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="E-mail" />
+            <input type="email" value={newUser.email} onChange={e => setNewUser(prev => ({ ...prev, email: e.target.value }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="E-mail" />
             <select value={newUser.role} onChange={e => setNewUser(prev => ({ ...prev, role: e.target.value as Role }))} className="p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
               <option value="OPERATOR">Operador</option>
               <option value="MANAGER">Gestor</option>
@@ -343,14 +412,53 @@ const SettingsView: React.FC<Props> = ({ settings, onUpdate, user }) => {
 
           <div className="space-y-2">
             {users.map(u => (
-              <div key={u.id} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-black text-slate-800 dark:text-slate-200">{u.name}</p>
-                  <p className="text-[10px] text-slate-500 uppercase font-bold">{u.username} - {u.role} - {u.area || '-'}</p>
-                </div>
-                <button onClick={() => removeUser(u.id)} className="text-red-500">
-                  <Trash2 size={16} />
-                </button>
+              <div key={u.id} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl space-y-4">
+                {editingUserId === u.id ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input value={editUser.name} onChange={e => setEditUser(prev => ({ ...prev, name: e.target.value }))} className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Nome" />
+                    <input value={editUser.username} onChange={e => setEditUser(prev => ({ ...prev, username: e.target.value }))} className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Usuário" />
+                    <input type="email" value={editUser.email} onChange={e => setEditUser(prev => ({ ...prev, email: e.target.value }))} className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="E-mail" />
+                    <input type="password" value={editUser.password} onChange={e => setEditUser(prev => ({ ...prev, password: e.target.value }))} className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Nova senha (opcional)" />
+                    <select value={editUser.role} onChange={e => setEditUser(prev => ({ ...prev, role: e.target.value as Role }))} className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
+                      <option value="OPERATOR">Operador</option>
+                      <option value="MANAGER">Gestor</option>
+                    </select>
+                    <select value={editUser.area} onChange={e => setEditUser(prev => ({ ...prev, area: e.target.value }))} className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold">
+                      {AREAS.map(area => <option key={area} value={area}>{area}</option>)}
+                    </select>
+                    {isSuperAdmin && (
+                      <input value={editUser.managerId} onChange={e => setEditUser(prev => ({ ...prev, managerId: e.target.value }))} className="md:col-span-2 p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold" placeholder="Manager ID" />
+                    )}
+                    <div className="md:col-span-2 flex flex-wrap gap-3">
+                      <button onClick={() => saveUserChanges(u.id)} className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all flex items-center gap-2">
+                        <Save size={14} /> Salvar alterações
+                      </button>
+                      <button onClick={cancelEditingUser} className="px-6 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-100 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-300 dark:hover:bg-slate-600 transition-all flex items-center gap-2">
+                        <X size={14} /> Cancelar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-black text-slate-800 dark:text-slate-200">{u.name}</p>
+                      <p className="text-[10px] text-slate-500 uppercase font-bold">{u.username} - {u.role} - {u.area || '-'}</p>
+                      {isSuperAdmin && (
+                        <p className="text-[10px] text-slate-400 uppercase font-bold mt-1">Manager ID: {u.managerId || '-'}</p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button onClick={() => startEditingUser(u)} className="text-emerald-600">
+                        <Pencil size={16} />
+                      </button>
+                      {!isSuperAdmin && (
+                        <button onClick={() => removeUser(u.id)} className="text-red-500">
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

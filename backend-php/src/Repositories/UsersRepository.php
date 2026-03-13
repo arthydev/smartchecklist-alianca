@@ -8,6 +8,24 @@ final class UsersRepository
     /** @var array<string, bool>|null */
     private ?array $columns = null;
 
+    public function listAll(): array
+    {
+        $sql = sprintf(
+            'SELECT * FROM `%s` ORDER BY `%s` ASC',
+            $this->table(),
+            $this->usernameField()
+        );
+
+        $rows = DB::get()->query($sql)->fetchAll();
+        $result = [];
+        foreach ($rows as $row) {
+            if (is_array($row)) {
+                $result[] = $this->mapUser($row);
+            }
+        }
+        return $result;
+    }
+
     public function listByManagerId(string|int $managerId): array
     {
         $sql = sprintf(
@@ -39,14 +57,72 @@ final class UsersRepository
         return is_array($row) ? $this->mapUser($row) : null;
     }
 
+    public function findByEmail(string $email): ?array
+    {
+        $emailField = $this->emailField();
+        if ($emailField === null) {
+            throw new RuntimeException('Email field not available');
+        }
+
+        $normalizedEmail = $this->normalizeEmail($email);
+        if ($normalizedEmail === '') {
+            throw new InvalidArgumentException('Invalid email');
+        }
+
+        $sql = sprintf(
+            'SELECT * FROM `%s` WHERE LOWER(TRIM(`%s`)) = :email LIMIT 1',
+            $this->table(),
+            $emailField
+        );
+
+        $stmt = DB::get()->prepare($sql);
+        $stmt->execute(['email' => $normalizedEmail]);
+        $row = $stmt->fetch();
+        return is_array($row) ? $this->mapUser($row) : null;
+    }
+
+    public function updatePassword(string|int $id, string $password): void
+    {
+        $trimmed = trim($password);
+        if ($trimmed === '') {
+            throw new InvalidArgumentException('Invalid password');
+        }
+
+        $sql = sprintf(
+            'UPDATE `%s` SET `%s` = :password WHERE `%s` = :id',
+            $this->table(),
+            $this->passwordField(),
+            $this->idField()
+        );
+
+        $stmt = DB::get()->prepare($sql);
+        $stmt->execute([
+            'password' => $this->preparePassword($trimmed),
+            'id' => (string) $id,
+        ]);
+    }
+
     public function create(array $data): array
     {
         $username = trim((string) ($data['username'] ?? ''));
         $role = trim((string) ($data['role'] ?? ''));
         $managerId = $data['managerId'] ?? null;
         $passwordRaw = $data['password'] ?? null;
+        $emailField = $this->emailField();
+        $email = $this->normalizeEmail((string) ($data['email'] ?? ''));
 
-        if ($username === '' || $role === '' || (string) $managerId === '' || !is_string($passwordRaw) || $passwordRaw === '') {
+        if ($emailField === null) {
+            throw new RuntimeException('Email field not available');
+        }
+
+        if (
+            $username === ''
+            || $role === ''
+            || (string) $managerId === ''
+            || !is_string($passwordRaw)
+            || $passwordRaw === ''
+            || $email === ''
+        ) {
             throw new InvalidArgumentException('Invalid payload');
         }
 
@@ -69,10 +145,7 @@ final class UsersRepository
             $fields[$nameField] = (string) ($data['name'] ?? $username);
         }
 
-        $emailField = $this->emailField();
-        if ($emailField !== null && array_key_exists('email', $data)) {
-            $fields[$emailField] = (string) $data['email'];
-        }
+        $fields[$emailField] = $email;
 
         $areaField = $this->areaField();
         if ($areaField !== null && array_key_exists('area', $data)) {
@@ -144,8 +217,16 @@ final class UsersRepository
             $updates[$this->nameField()] = (string) $data['name'];
         }
 
-        if (array_key_exists('email', $data) && $this->emailField() !== null) {
-            $updates[$this->emailField()] = (string) $data['email'];
+        if (array_key_exists('email', $data)) {
+            $emailField = $this->emailField();
+            $email = $this->normalizeEmail((string) $data['email']);
+            if ($emailField === null) {
+                throw new RuntimeException('Email field not available');
+            }
+            if ($email === '') {
+                throw new InvalidArgumentException('Invalid payload');
+            }
+            $updates[$emailField] = $email;
         }
 
         if (array_key_exists('area', $data) && $this->areaField() !== null) {
@@ -216,9 +297,6 @@ final class UsersRepository
         $managerId = $managerRaw !== null ? (string) $managerRaw : null;
 
         $role = (string) ($row[$this->roleField()] ?? '');
-        if ($role === 'MANAGER' && $id !== '') {
-            $managerId = $id;
-        }
 
         $created = null;
         $createdField = $this->optionalField(['created_at', 'createdAt']);
@@ -248,6 +326,11 @@ final class UsersRepository
             return $trimmed;
         }
         return password_hash($trimmed, PASSWORD_DEFAULT);
+    }
+
+    private function normalizeEmail(string $email): string
+    {
+        return strtolower(trim($email));
     }
 
     private function table(): string

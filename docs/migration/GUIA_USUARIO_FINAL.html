@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia do Usuario - SmartChecklist</title>
+  <style>
+    :root {
+      --bg: #eef3f8;
+      --panel: #ffffff;
+      --panel-soft: #f7fafc;
+      --text: #182434;
+      --muted: #5b6a7a;
+      --border: #d8e2ec;
+      --accent: #0f9d6c;
+      --accent-soft: #e7f8f1;
+      --shadow: 0 18px 40px rgba(15, 23, 38, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(15, 157, 108, 0.12), transparent 24%),
+        linear-gradient(180deg, #edf3f8 0%, #f7fbff 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 16px 40px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f1726 0%, #132d45 100%);
+      color: #f4fbff;
+      border-radius: 24px;
+      padding: 36px 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 2.3rem;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 780px;
+      color: rgba(244, 251, 255, 0.86);
+      font-size: 1.02rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar h2 {
+      margin: 0 0 14px;
+      font-size: 1rem;
+    }
+
+    .sidebar nav a {
+      display: block;
+      text-decoration: none;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      background: transparent;
+      transition: background 0.2s ease, color 0.2s ease;
+      font-size: 0.96rem;
+    }
+
+    .sidebar nav a:hover {
+      background: var(--accent-soft);
+      color: #0d6d4d;
+    }
+
+    .content {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .section > p:last-child {
+      margin-bottom: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.02rem;
+      color: #0e7c58;
+    }
+
+    .card p:last-child,
+    .card ul:last-child,
+    .card ol:last-child {
+      margin-bottom: 0;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #0d6d4d;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--accent);
+      background: #f7fcfa;
+      border-radius: 12px;
+      color: var(--muted);
+    }
+
+    ul, ol {
+      margin: 0 0 14px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    code {
+      background: #edf3f8;
+      border: 1px solid #dce7f0;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.94em;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 28px 22px;
+      }
+
+      .hero h1 {
+        font-size: 1.9rem;
+      }
+
+      .section {
+        padding: 22px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <h1>Guia do Usuario</h1>
+      <p>Manual de uso da aplicacao SmartChecklist para operadores e gestores. Este guia mostra o que cada tela faz e como executar os fluxos principais do sistema no dia a dia.</p>
+      <div class="tag-row">
+        <span class="tag">Equipamentos</span>
+        <span class="tag">Qualidade / Logistica</span>
+        <span class="tag">Sucata</span>
+        <span class="tag">Historico</span>
+        <span class="tag">Validacao</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>Indice</h2>
+        <nav>
+          <a href="#acesso">1. Acesso ao sistema</a>
+          <a href="#menu">2. Menu e perfis</a>
+          <a href="#equipamentos">3. Checklist de equipamentos</a>
+          <a href="#qualidade">4. Checklist de qualidade / logistica</a>
+          <a href="#sucata">5. Checklist de sucata</a>
+          <a href="#clientes-sucata">6. Clientes de sucata</a>
+          <a href="#historico">7. Historico</a>
+          <a href="#validacao">8. Validacao tecnica</a>
+          <a href="#configuracoes">9. Configuracoes</a>
+          <a href="#situacoes">10. Situacoes comuns</a>
+          <a href="#resumo">11. Resumo por perfil</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section class="section" id="acesso">
+          <h2>1. Acesso ao sistema</h2>
+          <div class="grid">
+            <div class="card">
+              <h3>Como entrar</h3>
+              <ol>
+                <li>Abra a aplicacao no navegador</li>
+                <li>Informe usuario e senha</li>
+                <li>Clique em <code>Entrar</code></li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>O que acontece depois</h3>
+              <ul>
+                <li>Operador vai normalmente para <code>Nova Inspecao</code></li>
+                <li>Gestor vai normalmente para <code>Painel de Controle</code></li>
+                <li>Ao sair, a sessao e encerrada</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="menu">
+          <h2>2. Menu e perfis</h2>
+          <p>O sistema pode mostrar telas diferentes dependendo do perfil e da area do usuario.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>Operador</h3>
+              <ul>
+                <li><code>Nova Inspecao</code></li>
+                <li><code>Historico</code></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Gestor</h3>
+              <ul>
+                <li><code>Painel de Controle</code></li>
+                <li><code>Historico</code></li>
+                <li><code>Validacao Tecnica</code></li>
+                <li><code>Configuracoes</code></li>
+              </ul>
+            </div>
+          </div>
+          <div class="note">Usuarios da area <code>SUCATA</code> tambem podem acessar a tela <code>Clientes de Sucata</code>.</div>
+        </section>
+
+        <section class="section" id="equipamentos">
+          <h2>3. Checklist de equipamentos</h2>
+          <p>Esse fluxo e usado para registrar a condicao de um equipamento antes da operacao.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>Passo a passo</h3>
+              <ol>
+                <li>Selecione o equipamento</li>
+                <li>Escolha o turno</li>
+                <li>Responda os itens como <code>C</code> ou <code>NC</code></li>
+                <li>Revise as respostas</li>
+                <li>Conclua o checklist</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Quando houver NC</h3>
+              <ul>
+                <li><strong>PRODUCAO:</strong> nao precisa anexar evidencias, mas precisa preencher observacoes</li>
+                <li><strong>Demais areas:</strong> precisam anexar evidencias e preencher observacoes</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note">Se houver bloqueio por manutencao, ausencia ou checklist anterior pendente, a nova inspecao pode ficar indisponivel.</div>
+        </section>
+
+        <section class="section" id="qualidade">
+          <h2>4. Checklist de qualidade / logistica</h2>
+          <p>Esse fluxo e usado nas inspecoes da area de qualidade, expedicao e carregamento.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>Passo a passo</h3>
+              <ol>
+                <li>Preencha os dados da operacao</li>
+                <li>Responda os itens da inspecao</li>
+                <li>Anexe evidencias quando necessario</li>
+                <li>Selecione colaborador Brasiltec quando o fluxo exigir</li>
+                <li>Conclua o checklist</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Cuidados</h3>
+              <ul>
+                <li>Preencha todos os campos obrigatorios</li>
+                <li>Revise os itens antes de concluir</li>
+                <li>Anexe evidencias nitidas quando exigido</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="sucata">
+          <h2>5. Checklist de sucata</h2>
+          <p>Esse fluxo controla a saida de sucata e gera a ficha em PDF antes do envio do email.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>Passo a passo</h3>
+              <ol>
+                <li>Preencha os dados da operacao</li>
+                <li>Informe os dados do transporte</li>
+                <li>Selecione o cliente</li>
+                <li>Anexe as evidencias obrigatorias</li>
+                <li>Gere o PDF</li>
+                <li>Revise o PDF</li>
+                <li>Confirme</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Depois da confirmacao</h3>
+              <ul>
+                <li>o checklist e salvo</li>
+                <li>o PDF e baixado</li>
+                <li>o email e aberto automaticamente</li>
+              </ul>
+              <p>O ticket da balanca pode ser anexado como imagem ou PDF.</p>
+            </div>
+          </div>
+          <div class="note">O email e preenchido conforme o cliente selecionado. Se o cliente nao tiver destinatarios cadastrados, o sistema avisa e o email pode abrir sem o campo <code>Para</code>.</div>
+        </section>
+
+        <section class="section" id="clientes-sucata">
+          <h2>6. Clientes de sucata</h2>
+          <p>Essa tela e usada para manter os clientes e os emails vinculados a cada cliente da area de sucata.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>O que pode ser feito</h3>
+              <ul>
+                <li>cadastrar cliente</li>
+                <li>editar cliente</li>
+                <li>excluir cliente</li>
+                <li>adicionar emails</li>
+                <li>remover emails</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Para que serve</h3>
+              <p>Esse cadastro e usado no checklist de sucata para preencher automaticamente os destinatarios do email do cliente escolhido.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="historico">
+          <h2>7. Historico</h2>
+          <p>A tela de historico serve para consultar registros ja realizados.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>O que consultar</h3>
+              <ul>
+                <li>dados principais do checklist</li>
+                <li>respostas</li>
+                <li>observacoes</li>
+                <li>evidencias</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Recursos</h3>
+              <ul>
+                <li>busca textual</li>
+                <li>filtros por data e horario</li>
+                <li>modal de detalhes</li>
+                <li>regeracao do PDF da sucata</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="validacao">
+          <h2>8. Validacao tecnica</h2>
+          <p>Essa tela e usada pelos gestores para analisar checklists com pendencia.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>Fluxo</h3>
+              <ol>
+                <li>Abrir a lista de pendencias</li>
+                <li>Analisar o checklist</li>
+                <li>Aprovar ou rejeitar</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Resultado</h3>
+              <ul>
+                <li><strong>Aprovado:</strong> a operacao segue</li>
+                <li><strong>Rejeitado:</strong> a pendencia permanece</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="configuracoes">
+          <h2>9. Configuracoes</h2>
+          <p>Essa tela concentra os principais cadastros operacionais do sistema.</p>
+          <div class="grid">
+            <div class="card">
+              <h3>Cadastros principais</h3>
+              <ul>
+                <li>usuarios</li>
+                <li>equipamentos</li>
+                <li>itens de inspecao</li>
+                <li>ausencias e manutencoes</li>
+                <li>dados auxiliares</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Importante</h3>
+              <p>Clientes e destinatarios da sucata ficam em <code>Clientes de Sucata</code>, e nao mais dentro de <code>Configuracoes</code>.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="situacoes">
+          <h2>10. Situacoes comuns</h2>
+          <div class="grid">
+            <div class="card">
+              <h3>Nao consigo iniciar uma nova inspecao</h3>
+              <p>Isso pode acontecer quando existe manutencao ativa, ausencia ativa ou checklist anterior pendente ou reprovado.</p>
+            </div>
+            <div class="card">
+              <h3>O email da sucata nao veio preenchido</h3>
+              <p>Verifique se o cliente selecionado possui destinatarios cadastrados na tela <code>Clientes de Sucata</code>.</p>
+            </div>
+            <div class="card">
+              <h3>O checklist ficou pendente</h3>
+              <p>Isso acontece quando existe uma nao conformidade que precisa de analise tecnica do gestor.</p>
+            </div>
+            <div class="card">
+              <h3>Boas praticas</h3>
+              <ul>
+                <li>preencha no momento real da operacao</li>
+                <li>nao deixe para depois</li>
+                <li>escreva observacoes com clareza</li>
+                <li>revise antes de concluir</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="resumo">
+          <h2>11. Resumo por perfil</h2>
+          <div class="grid">
+            <div class="card">
+              <h3>Operador de equipamentos</h3>
+              <ol>
+                <li>Entrar</li>
+                <li>Abrir <code>Nova Inspecao</code></li>
+                <li>Escolher equipamento e turno</li>
+                <li>Responder os itens</li>
+                <li>Concluir</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Operador de qualidade</h3>
+              <ol>
+                <li>Entrar</li>
+                <li>Abrir <code>Nova Inspecao</code></li>
+                <li>Preencher a inspecao</li>
+                <li>Anexar evidencias quando necessario</li>
+                <li>Concluir</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Operador de sucata</h3>
+              <ol>
+                <li>Entrar</li>
+                <li>Abrir <code>Nova Inspecao</code></li>
+                <li>Preencher os dados</li>
+                <li>Selecionar o cliente</li>
+                <li>Revisar PDF e enviar email</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Gestor</h3>
+              <ol>
+                <li>Acompanhar o painel</li>
+                <li>Consultar historico</li>
+                <li>Validar pendencias</li>
+                <li>Manter os cadastros atualizados</li>
+              </ol>
+            </div>
+          </div>
+          <div class="note">Em caso de duvida operacional, revise os dados preenchidos e acione o gestor ou o responsavel pelo sistema.</div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

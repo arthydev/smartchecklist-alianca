@@ -6,6 +6,8 @@ const distDir = path.join(rootDir, 'dist');
 const appDir = path.join(rootDir, 'backend-php', 'public', 'app');
 const publicAssetsDir = path.join(rootDir, 'backend-php', 'public', 'assets');
 const basePathAssetsDir = path.join(rootDir, 'backend-php', 'public', 'smartchecklist', 'assets');
+const publicRootGuideFile = path.join(rootDir, 'backend-php', 'public', 'guia-usuario.html');
+const basePathGuideFile = path.join(rootDir, 'backend-php', 'public', 'smartchecklist', 'guia-usuario.html');
 
 const ensureExists = (dir) => {
   if (!fs.existsSync(dir)) {
@@ -23,6 +25,16 @@ const emptyDir = (dir) => {
 const copyDirContents = (sourceDir, targetDir) => {
   ensureExists(targetDir);
   fs.cpSync(sourceDir, targetDir, { recursive: true, force: true });
+};
+
+const copyFileIfExists = (sourceFile, targetFile) => {
+  if (!fs.existsSync(sourceFile)) {
+    return false;
+  }
+
+  ensureExists(path.dirname(targetFile));
+  fs.copyFileSync(sourceFile, targetFile);
+  return true;
 };
 
 if (!fs.existsSync(distDir)) {
@@ -45,7 +57,17 @@ copyDirContents(builtAssetsDir, publicAssetsDir);
 emptyDir(basePathAssetsDir);
 copyDirContents(builtAssetsDir, basePathAssetsDir);
 
+const guideInDist = path.join(distDir, 'guia-usuario.html');
+const guideCopiedToRoot = copyFileIfExists(guideInDist, publicRootGuideFile);
+const guideCopiedToBasePath = copyFileIfExists(guideInDist, basePathGuideFile);
+
 console.log('SPA deployed to PHP public directories.');
 console.log(`- ${appDir}`);
 console.log(`- ${publicAssetsDir}`);
 console.log(`- ${basePathAssetsDir}`);
+if (guideCopiedToRoot) {
+  console.log(`- ${publicRootGuideFile}`);
+}
+if (guideCopiedToBasePath) {
+  console.log(`- ${basePathGuideFile}`);
+}

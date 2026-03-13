@@ -166,6 +166,11 @@ function currentManagerId(array $user): ?string
     }
 }
 
+function isSuperAdmin(array $user): bool
+{
+    return (string) ($user['id'] ?? '') === '1';
+}
+
 $router->get('/api/health', static function (): void {
     $dbEnabled = DB::isEnabled();
     $dbOk = $dbEnabled ? DB::ping() : false;
@@ -214,6 +219,41 @@ $router->post('/api/auth/login', static function (): void {
 $router->post('/api/auth/logout', static function (): void {
     Session::clear();
     Response::json(['ok' => true]);
+});
+
+$router->post('/api/auth/forgot-password', static function (): void {
+    $repo = new UsersRepository();
+
+    $raw = file_get_contents('php://input');
+    $payload = json_decode($raw ?: '[]', true);
+    if (!is_array($payload)) {
+        Response::json(['error' => 'Invalid payload'], 400);
+    }
+
+    $email = trim((string) ($payload['email'] ?? ''));
+    $newPassword = trim((string) ($payload['newPassword'] ?? ''));
+    if ($email === '' || $newPassword === '') {
+        Response::json(['error' => 'Email and new password are required'], 400);
+    }
+
+    try {
+        $target = $repo->findByEmail($email);
+        if ($target === null) {
+            Response::json(['error' => 'Email not found'], 404);
+        }
+
+        $repo->updatePassword((string) $target['id'], $newPassword);
+        Response::json(['ok' => true]);
+    } catch (InvalidArgumentException) {
+        Response::json(['error' => 'Invalid payload'], 400);
+    } catch (RuntimeException $e) {
+        if (str_contains($e->getMessage(), 'Email field not available')) {
+            Response::json(['error' => 'Email not configured'], 500);
+        }
+        Response::json(['error' => 'Failed to reset password'], 500);
+    } catch (Throwable) {
+        Response::json(['error' => 'Failed to reset password'], 500);
+    }
 });
 
 $router->get('/api/auth/protected-test', requireAuth(static function (array $user): void {
@@ -326,6 +366,10 @@ $router->post('/api/settings', requireAuth(static function (array $user): void {
 
 $router->get('/api/users', requireAuth(static function (array $user): void {
     $repo = new UsersRepository();
+    if (isSuperAdmin($user)) {
+        Response::json($repo->listAll());
+    }
+
     $userManagerId = currentManagerId($user);
     $requested = normalizeManagerIdInput($_GET['managerId'] ?? null);
 
@@ -392,6 +436,15 @@ $router->post('/api/checklists', requireAuth(static function (array $user): void
     $dataPayload = null;
     if (array_key_exists('data', $payload) && is_array($payload['data'])) {
         $dataPayload = $payload['data'];
+
+        // Frontend may send a flattened checklist object plus the legacy nested "data" object.
+        // In that case, root fields represent the latest user edits and must override nested stale values.
+        foreach ($payload as $key => $value) {
+            if ($key === 'data' || $key === 'managerId') {
+                continue;
+            }
+            $dataPayload[$key] = $value;
+        }
     } elseif (!array_key_exists('data', $payload)) {
         $dataPayload = $payload;
     }
@@ -460,6 +513,11 @@ $router->post('/api/users', requireRole(['MANAGER'], static function (array $use
         Response::json($created);
     } catch (InvalidArgumentException) {
         Response::json(['error' => 'Invalid payload'], 400);
+    } catch (RuntimeException $e) {
+        if (str_contains($e->getMessage(), 'Email field not available')) {
+            Response::json(['error' => 'Email field not available. Run database migrations.'], 500);
+        }
+        Response::json(['error' => 'Failed to create user'], 500);
     }
 }));
 
@@ -480,7 +538,8 @@ $router->put('/api/users/:id', requireRole(['MANAGER'], static function (array $
     if ($target === null) {
         Response::json(['error' => 'Not found'], 404);
     }
-    if ((string) ($target['managerId'] ?? '') !== (string) $userManagerId) {
+    $superAdmin = isSuperAdmin($user);
+    if (!$superAdmin && (string) ($target['managerId'] ?? '') !== (string) $userManagerId) {
         Response::json(['error' => 'Forbidden'], 403);
     }
 
@@ -489,15 +548,24 @@ $router->put('/api/users/:id', requireRole(['MANAGER'], static function (array $
     if (!is_array($payload)) {
         Response::json(['error' => 'Invalid payload'], 400);
     }
-    $payload['managerId'] = $userManagerId;
+    if ($superAdmin) {
+        if (!array_key_exists('managerId', $payload) || normalizeManagerIdInput($payload['managerId'] ?? null) === null) {
+            $payload['managerId'] = $target['managerId'] ?? $userManagerId;
+        }
+    } else {
+        $payload['managerId'] = $userManagerId;
+    }
 
     try {
         $updated = $repo->update($targetId, $payload);
         Response::json($updated);
+    } catch (RuntimeException $e) {
+        if (str_contains($e->getMessage(), 'Email field not available')) {
+            Response::json(['error' => 'Email field not available. Run database migrations.'], 500);
+        }
+        Response::json(['error' => 'Not found'], 404);
     } catch (InvalidArgumentException) {
         Response::json(['error' => 'Invalid payload'], 400);
-    } catch (RuntimeException) {
-        Response::json(['error' => 'Not found'], 404);
     }
 }));
 

@@ -5,7 +5,7 @@ import { ShieldCheck, CheckCircle, XCircle, Clock, Info, MessageCircle, Maximize
 
 interface Props {
   checklists: ChecklistEntry[];
-  onUpdate: (entry: ChecklistEntry) => void;
+  onUpdate: (entry: ChecklistEntry) => Promise<void>;
   currentUser: { name?: string; username?: string } | null;
 }
 
@@ -13,6 +13,7 @@ const ValidationView: React.FC<Props> = ({ checklists, onUpdate, currentUser }) 
   const [selected, setSelected] = useState<ChecklistEntry | null>(null);
   const [fullscreenImg, setFullscreenImg] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'PENDING' | 'BLOCKED'>('PENDING');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const pending = checklists.filter(c => c.approvalStatus === 'PENDING');
   const blocked = checklists.filter(c => c.approvalStatus === 'REJECTED');
@@ -20,22 +21,26 @@ const ValidationView: React.FC<Props> = ({ checklists, onUpdate, currentUser }) 
   const getDisplayedItems = () => activeTab === 'PENDING' ? pending : blocked;
   const displayedItems = getDisplayedItems();
 
-  const handleAction = (status: ApprovalStatus) => {
-    if (!selected) return;
+  const handleAction = async (status: ApprovalStatus) => {
+    if (!selected || isSubmitting) return;
     const supervisorName = currentUser?.name || currentUser?.username || 'Supervisor';
 
-    // If unlocking, we essentially approve it but maybe we want to keep a note?
-    // For now, setting to APPROVED releases the lock.
     const updatedEntry = {
       ...selected,
       approvalStatus: status,
       supervisorName
     };
 
-    onUpdate(updatedEntry);
-    const actionText = status === 'APPROVED' ? 'LIBERADO' : 'BLOQUEADO';
-    alert(`Sincronizado: O equipamento ${selected.equipmentNo} foi ${actionText} no sistema.`);
-    setSelected(null);
+    setIsSubmitting(true);
+    try {
+      await onUpdate(updatedEntry);
+      const actionText = status === 'APPROVED' ? 'LIBERADO' : 'BLOQUEADO';
+      alert(`Sincronizado: O equipamento ${selected.equipmentNo} foi ${actionText} no sistema.`);
+      setSelected(null);
+      setActiveTab(status === 'REJECTED' ? 'BLOCKED' : 'PENDING');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -212,7 +217,8 @@ const ValidationView: React.FC<Props> = ({ checklists, onUpdate, currentUser }) 
               <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-slate-100 dark:border-slate-800">
                 {selected.approvalStatus === 'REJECTED' ? (
                   <button
-                    onClick={() => handleAction('APPROVED')}
+                    onClick={() => void handleAction('APPROVED')}
+                    disabled={isSubmitting}
                     className="w-full py-6 bg-emerald-600 text-white rounded-[1.5rem] font-black text-xs flex items-center justify-center gap-3 hover:bg-emerald-700 transition-all uppercase tracking-widest shadow-xl shadow-emerald-200 dark:shadow-none"
                   >
                     <Unlock size={20} /> Desbloquear Ativo
@@ -220,13 +226,15 @@ const ValidationView: React.FC<Props> = ({ checklists, onUpdate, currentUser }) 
                 ) : (
                   <>
                     <button
-                      onClick={() => handleAction('REJECTED')}
+                      onClick={() => void handleAction('REJECTED')}
+                      disabled={isSubmitting}
                       className="flex-1 py-6 bg-white dark:bg-slate-900 border-2 border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 rounded-[1.5rem] font-black text-xs flex items-center justify-center gap-3 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all uppercase tracking-widest shadow-lg dark:shadow-none shadow-red-100"
                     >
                       <XCircle size={20} /> Manter Bloqueio
                     </button>
                     <button
-                      onClick={() => handleAction('APPROVED')}
+                      onClick={() => void handleAction('APPROVED')}
+                      disabled={isSubmitting}
                       className="flex-1 py-6 bg-slate-900 dark:bg-emerald-600 text-white rounded-[1.5rem] font-black text-xs flex items-center justify-center gap-3 hover:bg-black dark:hover:bg-emerald-700 shadow-2xl dark:shadow-none shadow-slate-200 transition-all uppercase tracking-widest"
                     >
                       <CheckCircle size={20} className="text-emerald-400" /> Liberar Ativo

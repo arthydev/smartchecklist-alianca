@@ -381,7 +381,7 @@ ${entry.userName}`;
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-2">
-                <input placeholder="Tara Caminhao (kg)" type="number" className="p-3 bg-slate-50 rounded-xl text-sm font-bold border-none" value={formData.truckTare} onChange={(e) => setFormData({ ...formData, truckTare: e.target.value })} required />
+                <input placeholder="Peso Bruto Caminhao (kg)" type="number" className="p-3 bg-slate-50 rounded-xl text-sm font-bold border-none" value={formData.truckTare} onChange={(e) => setFormData({ ...formData, truckTare: e.target.value })} required />
                 <input placeholder="Tara Cacamba (kg)" type="number" className="p-3 bg-slate-50 rounded-xl text-sm font-bold border-none" value={formData.bucketTare} onChange={(e) => setFormData({ ...formData, bucketTare: e.target.value })} required />
               </div>
               <div className="grid grid-cols-1 gap-3">

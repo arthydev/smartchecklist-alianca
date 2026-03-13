@@ -218,7 +218,7 @@ export const buildScrapPdf = async ({ formData, evidences, user, entryId }: Buil
   y = Math.max(y7, y8) + 2;
 
   const y9 = addField(pdf, 'Hora 2a Pesagem', formData.secondWeightTime, leftX, y, 80, 13, 15);
-  const y10 = addField(pdf, 'Tara Caminhao (kg)', formData.truckTare, rightX, y, 80, 13, 15);
+  const y10 = addField(pdf, 'Peso Bruto Caminhao (kg)', formData.truckTare, rightX, y, 80, 13, 15);
   y = Math.max(y9, y10) + 2;
 
   const y11 = addField(pdf, 'Peso Liquido (kg)', formData.netWeight, leftX, y, 80, 13, 15);

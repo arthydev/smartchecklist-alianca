@@ -21,7 +21,7 @@ return [
             'id' => '1',
             'name' => 'Administrador Master',
             'username' => 'ADMIN',
-            'password' => password_hash('ADMIN', PASSWORD_DEFAULT),
+            'password' => password_hash('ADMIN@ACOS2026', PASSWORD_DEFAULT),
             'role' => 'MANAGER',
             'phone' => '5511999999999',
             'manager_id' => null,

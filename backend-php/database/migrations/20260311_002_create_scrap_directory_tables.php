@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `scrap_clients` (
   UNIQUE KEY `uniq_scrap_clients_manager_name` (`manager_id`, `client_name`),
   KEY `idx_scrap_clients_manager_id` (`manager_id`),
   CONSTRAINT `fk_scrap_clients_manager` FOREIGN KEY (`manager_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
 SQL);
 
         $pdo->exec(<<<SQL
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `scrap_client_recipients` (
   UNIQUE KEY `uniq_scrap_client_recipient` (`scrap_client_id`, `email`),
   KEY `idx_scrap_client_recipients_client_id` (`scrap_client_id`),
   CONSTRAINT `fk_scrap_client_recipients_client` FOREIGN KEY (`scrap_client_id`) REFERENCES `scrap_clients` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
 SQL);
     },
 ];

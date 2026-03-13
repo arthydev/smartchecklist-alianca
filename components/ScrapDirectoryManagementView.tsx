@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
 import { AppSettings, ScrapClientDirectoryEntry, User } from '../types';
-import { Mail, Plus, Save, Trash2, Users } from 'lucide-react';
+import { ChevronDown, ChevronUp, Copy, Mail, Plus, Save, Trash2, Users } from 'lucide-react';
 
 interface Props {
   settings: AppSettings;
@@ -24,6 +24,9 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
   const [selectedId, setSelectedId] = useState<string | null>(initialDirectory[0]?.id || null);
   const [draftClient, setDraftClient] = useState<ScrapClientDirectoryEntry | null>(initialDirectory[0] || null);
   const [newRecipient, setNewRecipient] = useState('');
+  const [copySourceClientId, setCopySourceClientId] = useState('');
+  const [copyTargetClientId, setCopyTargetClientId] = useState('');
+  const [isCopyBoxOpen, setIsCopyBoxOpen] = useState(false);
 
   useEffect(() => {
     setDirectory(initialDirectory);
@@ -60,7 +63,7 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
 
     const duplicated = directory.some((entry) => entry.id !== client.id && normalizeClient(entry.client) === normalizedName);
     if (duplicated) {
-      alert('J?? existe um cliente com esse nome.');
+      alert('Ja existe um cliente com esse nome.');
       return null;
     }
 
@@ -126,12 +129,12 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
 
     const normalized = normalizeEmail(newRecipient);
     if (!normalized) {
-      alert('Informe um destinat??rio v??lido.');
+      alert('Informe um destinatario valido.');
       return;
     }
 
     if (!draftClient.client.trim()) {
-      alert('Informe o nome do cliente antes de adicionar destinat??rios.');
+      alert('Informe o nome do cliente antes de adicionar destinatarios.');
       return;
     }
 
@@ -158,13 +161,64 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
     });
   };
 
+  const copyRecipientsBetweenClients = () => {
+    if (!canEdit) return;
+
+    if (!copySourceClientId || !copyTargetClientId) {
+      alert('Selecione o cliente de origem e o cliente de destino.');
+      return;
+    }
+
+    if (copySourceClientId === copyTargetClientId) {
+      alert('Origem e destino precisam ser diferentes.');
+      return;
+    }
+
+    const sourceClient = directory.find((entry) => entry.id === copySourceClientId);
+    const targetClient = directory.find((entry) => entry.id === copyTargetClientId);
+    if (!sourceClient || !targetClient) {
+      alert('Nao foi possivel localizar os clientes selecionados.');
+      return;
+    }
+
+    const sourceRecipients = Array.from(new Set(sourceClient.recipients.map(normalizeEmail).filter(Boolean)));
+    if (sourceRecipients.length === 0) {
+      alert('O cliente de origem nao possui destinatarios para copiar.');
+      return;
+    }
+
+    const targetRecipients = Array.from(new Set(targetClient.recipients.map(normalizeEmail).filter(Boolean)));
+    const targetSet = new Set(targetRecipients);
+    const recipientsToCopy = sourceRecipients.filter((email) => !targetSet.has(email));
+
+    if (recipientsToCopy.length === 0) {
+      alert('Nenhum destinatario novo foi copiado. O cliente de destino ja possui todos os e-mails da origem.');
+      selectClient(targetClient.id);
+      return;
+    }
+
+    const updatedTarget: ScrapClientDirectoryEntry = {
+      ...targetClient,
+      recipients: [...targetRecipients, ...recipientsToCopy],
+    };
+
+    const nextDirectory = directory.map((entry) => (entry.id === updatedTarget.id ? updatedTarget : entry));
+    persistDirectory(nextDirectory);
+    setSelectedId(updatedTarget.id);
+    setDraftClient({ ...updatedTarget, recipients: [...updatedTarget.recipients] });
+    setCopyTargetClientId(updatedTarget.id);
+
+    const skippedCount = sourceRecipients.length - recipientsToCopy.length;
+    alert(`Copiados ${recipientsToCopy.length} destinatario(s). ${skippedCount} destinatario(s) foram ignorados por ja existirem.`);
+  };
+
   return (
     <div className="space-y-8 pb-20 max-w-7xl mx-auto transition-colors duration-300">
       <div className="flex items-center justify-between pb-6 border-b-2 border-slate-100 dark:border-slate-800">
         <div>
-          <h2 className="text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tighter">Gestão de Sucata</h2>
+          <h2 className="text-3xl font-black text-slate-900 dark:text-slate-100 uppercase tracking-tighter">Gestao de Sucata</h2>
           <p className="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-2">
-            Clientes e destinatários por operação de sucata
+            Clientes e destinatarios por operacao de sucata
           </p>
         </div>
         <button
@@ -205,7 +259,7 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
                   <div>
                     <p className="text-sm font-black text-slate-800 dark:text-slate-100">{entry.client}</p>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                      {entry.recipients.length} destinatário(s)
+                      {entry.recipients.length} destinatario(s)
                     </p>
                   </div>
                   <button
@@ -227,12 +281,12 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
 
         <section className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/30 dark:shadow-none space-y-6">
           <h3 className="font-black text-slate-900 dark:text-slate-100 uppercase text-xs tracking-widest flex items-center gap-3">
-            <Mail size={18} className="text-emerald-500" /> Destinatários vinculados
+            <Mail size={18} className="text-emerald-500" /> Destinatarios vinculados
           </h3>
 
           {!draftClient ? (
             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800 text-sm font-bold text-slate-400 dark:text-slate-500">
-              Selecione ou crie um cliente para editar os destinatários.
+              Selecione ou crie um cliente para editar os destinatarios.
             </div>
           ) : (
             <>
@@ -251,7 +305,7 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
 
               <div className="space-y-3">
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                  Destinatários de e-mail
+                  Destinatarios de e-mail
                 </label>
 
                 <div className="flex flex-col md:flex-row gap-3">
@@ -275,7 +329,7 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
                 <div className="space-y-2">
                   {draftClient.recipients.length === 0 && (
                     <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 text-xs font-bold text-amber-700 dark:text-amber-400">
-                      Cliente sem destinatários configurados.
+                      Cliente sem destinatarios configurados.
                     </div>
                   )}
 
@@ -293,6 +347,72 @@ const ScrapDirectoryManagementView: React.FC<Props> = ({ settings, onUpdate, use
                     </div>
                   ))}
                 </div>
+              </div>
+
+              <div className="bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 rounded-[1.5rem] overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setIsCopyBoxOpen((current) => !current)}
+                  className="w-full flex items-center justify-between gap-4 p-4 text-left hover:bg-white/70 dark:hover:bg-slate-800/60 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-emerald-600">
+                      <Copy size={16} />
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Copiar destinatarios entre clientes</p>
+                      <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                        {isCopyBoxOpen ? 'Clique para recolher' : 'Clique para expandir'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-slate-400 dark:text-slate-500">
+                    {isCopyBoxOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                  </div>
+                </button>
+                {isCopyBoxOpen && (
+                  <div className="px-4 pb-4 space-y-3 border-t border-slate-100 dark:border-slate-800">
+                    <div className="pt-4">
+                      <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500">
+                        Copie os e-mails de um cliente para outro sem duplicar destinatarios ja existentes.
+                      </p>
+                    </div>
+                    <div className="space-y-1 pt-2">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Cliente de origem</label>
+                      <select
+                        value={copySourceClientId}
+                        onChange={(event) => setCopySourceClientId(event.target.value)}
+                        className="w-full p-4 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      >
+                        <option value="">Selecione o cliente de origem...</option>
+                        {directory.map((entry) => (
+                          <option key={entry.id} value={entry.id}>{entry.client}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Cliente de destino</label>
+                      <select
+                        value={copyTargetClientId}
+                        onChange={(event) => setCopyTargetClientId(event.target.value)}
+                        className="w-full p-4 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      >
+                        <option value="">Selecione o cliente de destino...</option>
+                        {directory.map((entry) => (
+                          <option key={entry.id} value={entry.id}>{entry.client}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={copyRecipientsBetweenClients}
+                      disabled={!copySourceClientId || !copyTargetClientId || copySourceClientId === copyTargetClientId}
+                      className="w-full py-4 bg-slate-900 dark:bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase shadow-xl hover:bg-black dark:hover:bg-emerald-700 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-slate-900 dark:disabled:hover:bg-emerald-600 flex items-center justify-center gap-2"
+                    >
+                      <Copy size={16} /> Copiar destinatarios
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="pt-4 border-t border-slate-100 dark:border-slate-800">

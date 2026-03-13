@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard, ClipboardCheck, History, ShieldCheck, Menu, X, Settings, LogOut, Moon, Sun, Box, Mail
+  LayoutDashboard, ClipboardCheck, History, ShieldCheck, Menu, X, Settings, LogOut, Moon, Sun, Box, Mail, BookOpen
 } from 'lucide-react';
 import { AppView, ChecklistEntry, User, AppSettings } from './types';
 import Dashboard from './components/Dashboard';
@@ -23,6 +23,7 @@ import DatabaseStatus from './components/DatabaseStatus';
 import AppVersion from './components/AppVersion';
 
 const App: React.FC = () => {
+  const guideUrl = `${import.meta.env.BASE_URL}guia-usuario.html`;
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentView, setCurrentView] = useState<AppView>(AppView.LOGIN);
   const [authChecked, setAuthChecked] = useState(false);
@@ -114,13 +115,17 @@ const App: React.FC = () => {
     }
   };
 
-  const handleUpdateChecklist = (updated: ChecklistEntry) => {
+  const handleUpdateChecklist = async (updated: ChecklistEntry): Promise<void> => {
     if (!managerContext) return;
-    backend.updateChecklist(updated.id, updated).then(() => {
-      backend.getChecklists(managerContext).then(setChecklists);
-    }).catch((e: any) => {
+    try {
+      const saved = await backend.updateChecklist(updated.id, updated);
+      setChecklists((current) => current.map((entry) => entry.id === saved.id ? saved : entry));
+      const latest = await backend.getChecklists(managerContext);
+      setChecklists(latest);
+    } catch (e: any) {
       alert(e?.message || 'Falha ao atualizar checklist.');
-    });
+      throw e;
+    }
   };
 
   const handleUpdateSettings = (newSettings: AppSettings) => {
@@ -157,13 +162,13 @@ const App: React.FC = () => {
       <header className="md:hidden bg-slate-900 dark:bg-slate-950 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-lg shadow-slate-900/10 border-b dark:border-slate-800">
         <Logo size="sm" variant="light" />
         <div className="flex items-center gap-2">
-          <div className="mr-2">
+          <div className="hidden sm:block mr-2">
             <DatabaseStatus />
           </div>
-          <div className="mr-2">
+          <div className="hidden sm:block mr-2">
             <AppVersion />
           </div>
-          <button onClick={toggleTheme} className="p-2 bg-white/10 rounded-xl">
+          <button onClick={toggleTheme} className="hidden sm:flex p-2 bg-white/10 rounded-xl">
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 bg-white/10 rounded-xl">
@@ -185,6 +190,15 @@ const App: React.FC = () => {
           <NavItem view={AppView.ASSETS} icon={Box} label="Ativos e Itens" hidden={currentUser?.role !== 'MANAGER' || currentUser?.area === 'SUCATA'} />
           <NavItem view={AppView.SCRAP_DIRECTORY} icon={Mail} label="Clientes de Sucata" hidden={currentUser?.area !== 'SUCATA'} />
           <NavItem view={AppView.SETTINGS} icon={Settings} label="Configurações" hidden={currentUser?.role !== 'MANAGER'} />
+          <a
+            href={guideUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-3 w-full p-4 rounded-2xl text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200 transition-all"
+          >
+            <BookOpen size={18} />
+            <span className="font-black text-[11px] uppercase tracking-widest">Guia do Usuario</span>
+          </a>
 
           <div className="pt-4 mt-4 border-t border-slate-50 dark:border-slate-800">
             <button

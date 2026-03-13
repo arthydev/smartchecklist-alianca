@@ -33,6 +33,8 @@ const ChecklistForm: React.FC<Props> = ({ onSave, user, settings, checklists }) 
   const lockStatus = backend.isEquipmentLocked(formData.equipmentNo, managerId, settings.equipment, checklists, settings.absences);
   const isShiftTaken = formData.equipmentNo ? backend.hasChecklistForShiftToday(formData.equipmentNo, formData.shift, managerId, checklists) : false;
   const hasNC = formData.items.some(i => i.status === 'NC');
+  const isProductionArea = user.area === 'PRODU\u00C7\u00C3O';
+  const requiresEvidenceForNC = !isProductionArea;
   const selectedEquipment = settings.equipment.find(eq => eq.code === formData.equipmentNo);
   const linkedItemsCount = selectedEquipment
     ? settings.items.filter(item => item.equipmentId === selectedEquipment.id && (user.role !== 'OPERATOR' || item.area === user.area)).length
@@ -253,38 +255,46 @@ const ChecklistForm: React.FC<Props> = ({ onSave, user, settings, checklists }) 
 
         {step === 3 && (
           <div className="space-y-8 animate-fade-in">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
-              <h3 className="font-black text-slate-900 dark:text-slate-100 uppercase text-xs tracking-widest flex items-center gap-3">
-                <Camera size={18} className="text-emerald-500" /> Evidências Fotográficas
-              </h3>
-              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{evidences.length} fotos anexadas</span>
-            </div>
+            {requiresEvidenceForNC && (
+              <>
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                  <h3 className="font-black text-slate-900 dark:text-slate-100 uppercase text-xs tracking-widest flex items-center gap-3">
+                    <Camera size={18} className="text-emerald-500" /> Evid??ncias Fotogr??ficas
+                  </h3>
+                  <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{evidences.length} fotos anexadas</span>
+                </div>
 
-            <EvidenceUploader evidences={evidences} onUpdate={setEvidences} />
-
-            {/* Legacy input removed, now handled by EvidenceUploader */}
+                <EvidenceUploader evidences={evidences} onUpdate={setEvidences} />
+              </>
+            )}
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Observações Técnicas</label>
+              <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Observa????es T??cnicas</label>
               <textarea
                 value={formData.observations}
                 onChange={e => setFormData({ ...formData, observations: e.target.value })}
                 className="w-full p-6 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] h-32 outline-none text-sm font-bold focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all resize-none text-slate-900 dark:text-slate-100 shadow-inner"
-                placeholder="Descreva detalhes importantes da inspeção..."
+                placeholder="Descreva detalhes importantes da inspe????o..."
               />
             </div>
 
             <button
               type="submit"
-              disabled={evidences.length === 0 || !formData.observations.trim()}
+              disabled={(requiresEvidenceForNC && evidences.length === 0) || !formData.observations.trim()}
               className="w-full py-6 bg-slate-900 dark:bg-emerald-600 text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-black dark:hover:bg-emerald-700 transition-all shadow-2xl dark:shadow-none active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-              title={evidences.length === 0 || !formData.observations.trim() ? "Anexe fotos e adicione observações para finalizar" : ""}
+              title={
+                (requiresEvidenceForNC && evidences.length === 0) || !formData.observations.trim()
+                  ? (requiresEvidenceForNC ? "Anexe fotos e adicione observa????es para finalizar" : "Adicione observa????es para finalizar")
+                  : ""
+              }
             >
               <Send size={18} /> Finalizar e Sincronizar
             </button>
-            {(evidences.length === 0 || !formData.observations.trim()) && (
+            {((requiresEvidenceForNC && evidences.length === 0) || !formData.observations.trim()) && (
               <p className="text-center text-[10px] text-red-500 font-bold uppercase tracking-widest animate-pulse">
-                * Obrigatório: Anexar evidências e preencher observações
+                {requiresEvidenceForNC
+                  ? '* Obrigat??rio: Anexar evid??ncias e preencher observa????es'
+                  : '* Obrigat??rio: preencher observa????es'}
               </p>
             )}
           </div>
